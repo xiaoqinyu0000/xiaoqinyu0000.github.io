@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="DevQin的技术博客">
 <meta property="og:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-07T15:35:18.545Z">
+<meta property="og:updated_time" content="2017-11-07T15:42:45.875Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java设计模式之观察者模式">
 <meta name="twitter:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！">
@@ -144,15 +144,15 @@
 <p>​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！”</p>
 <p>​    小胖被老王说得心痒痒，思绪万千，想着如果能从老王这里讨来一两招，那自己以后就可以早点下班回去陪小美，嘴角露出了一抹笑意。</p>
 <p>​    老王摊开手中的本子，用笔在上面写了一个<strong>UserAction.java</strong>：</p>
-<p>​    “村里的登录系统可是我负责的，每当用户登录或者退出的之后，我就得做好多事，就拿登录来说吧。</p>
+<p>​    “村里的登录系统可是我负责的，每当用户登录或者退出之后，我就得做好多事，就拿登录来说吧。</p>
 <p>​    请求服务器登录用户之后，我需要：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAction</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">loginSuccess</span><span class="params">(UserBean userBean)</span></span>&#123;</div><div class="line">    DBContext.saveLoginUser(userBean);	<span class="comment">//找DBCOntext把用户信息保存到数据库</span></div><div class="line">    IMContext.init(userBean); <span class="comment">//找IMContextna初始化聊天系统</span></div><div class="line">    StoreContext.init(userBean); <span class="comment">//找StoreContext初始化商城服务 </span></div><div class="line">    PageContext.finishLoginPage(); <span class="comment">//找PageContext关闭登录页面</span></div><div class="line">    ... </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>又要找这个，又要找那个，已经让我够烦恼的，然而村长还经常找我麻烦：</p>
 <p>村长今天跟我说，村里的商城服务暂时不开放，让我不用去找StoreContext初始化。</p>
-<p>明天跟我说，村里新增了社区系统，让我找BBSContext.init(userBean)初始化社区服务。</p>
-<p>后天又跟我说，村里开放了商城服务，让我找StoreContext进行初始化。</p>
+<p>明天又跟我说，村里新增了社区系统，让我找BBSContext.init(userBean)初始化社区服务。</p>
+<p>后天又说，村里开放了商城服务，让我找StoreContext进行初始化。</p>
 <p>NND！村里的一点变动都得找上我，经常半夜2-3点被叫起来协助其他服务调试。”</p>
-<h3 id="2-使用Observable和Observer实现一个发布-订阅模型"><a href="#2-使用Observable和Observer实现一个发布-订阅模型" class="headerlink" title="2.使用Observable和Observer实现一个发布/订阅模型"></a>2.使用Observable和Observer实现一个发布/订阅模型</h3><p>“自打Observable和Observer进村之后，我就听说他们擅长处理一个类与多个类的交互。</p>
+<h3 id="2-使用Observable和Observer实现一个发布-订阅模型"><a href="#2-使用Observable和Observer实现一个发布-订阅模型" class="headerlink" title="2.使用Observable和Observer实现一个发布/订阅模型"></a>2.使用Observable和Observer实现一个发布/订阅模型</h3><p>“自打Observable和Observer这对双胞胎进村之后，我就听说他们擅长处理一个类与多个类的交互。</p>
 <p>我找到了他们。</p>
 <p>他们了解我的苦恼之后，表示这种问题在他们那边so easy，因为他们可以帮我完成<strong>发布/订阅</strong>模型。</p>
 <p>我表示疑虑，这种没听说过的模型能拯救我吗？</p>
@@ -181,10 +181,10 @@
 <p>DBContext这次比我还着急，询问Observable，他得如何订阅？</p>
 <p>Observable说，订阅的细节我们兄弟俩已经处理好了，只要实现老二Observer接口的类调用继承老大Observable类的addObserver(Observer o)方法即可完成订阅：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBContext</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DBContext</span><span class="params">()</span></span>&#123;</div><div class="line">    	UserAction userAction = UserAction.getInstance();</div><div class="line">      userAction.addObserver(<span class="keyword">this</span>);	<span class="comment">//订阅操作</span></div><div class="line">  &#125;</div><div class="line">    </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Observable observable, Object o)</span> </span>&#123;</div><div class="line">      ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>我们试了一遍，果然我调用notifyObservers(userBean)方法，DBContext的update方法就收到的userBean，更爽的是，不管有多少个类的得到用户登录或退出的通知，我都不用改变一行代码。</p>
-<p>经过和村长的一番协(sī)商（B），以后谁想得到用户登录的注销的消息，只要实现老二Observer，重写update(observable,o)方法，并调用我的addObserver(Observer o)方法进行订阅就行。</p>
+<p>我们试了N遍，果然每次我一调用notifyObservers(userBean)把userBean发布出去，DBContext的update方法就相应并接收到userBean，更爽的是，不管有多少个类的接收用户登录或退出的通知，我都不用改变一行代码。</p>
+<p>经过和村长的一番协(sī)商（B），以后谁想得到用户登录的注销的消息，只要实现老二Observer，重写update(Observable observable, Object o)方法，并调用我的addObserver(Observer o)方法进行订阅就行。</p>
 <p>通过这个<strong>发布/订阅</strong>模型，我也解放了很多劳动力。”</p>
-<h3 id="3-原理"><a href="#3-原理" class="headerlink" title="3.原理"></a>3.原理</h3><p>“厉害了，化主动为被动。可是，这是到底是为什么呢？”，小胖有着一种刨根问底的精神。</p>
+<h3 id="3-自定义一个发布-订阅模型"><a href="#3-自定义一个发布-订阅模型" class="headerlink" title="3.自定义一个发布/订阅模型"></a>3.自定义一个发布/订阅模型</h3><p>“厉害了，化主动为被动。可是，这是到底是为什么呢？”，小胖有着一种刨根问底的精神。</p>
 <p>“起初，我也不太清楚，但有一天，看到一篇叫《Java帝国之回调机制》的文章后，我突然明白了一些什么。于是乎，我决定不借助Observable兄弟，自定义一波<strong>发布/订阅</strong>模型。</p>
 <p>起初，我定义了一个接口<strong>IUserActionEvents</strong>，要订阅用户登录或退出消息的类必须实现这个接口，重写里面的<strong>onLoginEvent(UserBean userBean)</strong>和<strong>onLogoutEvent()</strong>方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IUserActionEvents</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">onLoginEvent</span><span class="params">(UserBean userBean)</span></span>;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">onLogoutEvent</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -209,7 +209,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2017年11月07日 23:35</p>
+        <p>最后更新： 2017年11月07日 23:42</p>
         <p>原始链接： <a class="post-url" href="/2017/11/07/Java/JavaObservable/" title="Java设计模式之观察者模式">https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/</a></p>
         <footer>
             <a href="https://xiaoqinyu0000.github.io">
@@ -285,7 +285,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#观察者模式"><span class="post-toc-text">观察者模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-使用Observable和Observer实现一个发布-订阅模型"><span class="post-toc-text">2.使用Observable和Observer实现一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-原理"><span class="post-toc-text">3.原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-附录："><span class="post-toc-text">4.附录：</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#观察者模式"><span class="post-toc-text">观察者模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-使用Observable和Observer实现一个发布-订阅模型"><span class="post-toc-text">2.使用Observable和Observer实现一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-自定义一个发布-订阅模型"><span class="post-toc-text">3.自定义一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-附录："><span class="post-toc-text">4.附录：</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
