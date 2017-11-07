@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java帝国之拨云见日识回调 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog" />
+  
+  <meta name="description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   故事背景在日常编程中，我们经常需要对内存的数据进行持久化的工作，把他们保存在硬盘文件或者数据库中。 为了避免重复， 我们通常会把这部分工作封装在一个工具类中， 让各个客户端来调用。 下文的FileIO就是一个简单的工具类（为了简单起见，并没有使用单例或静态方法来实现） 小张的烦恼Java 帝国的FileIO是一个忙碌的家">
+<meta name="keywords" content="MinHow,MinHow&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java帝国之拨云见日识回调">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   故事背景在日常编程中，我们经常需要对内存的数据进行持久化的工作，把他们保存在硬盘文件或者数据库中。 为了避免重复， 我们通常会把这部分工作封装在一个工具类中， 让各个客户端来调用。 下文的FileIO就是一个简单的工具类（为了简单起见，并没有使用单例或静态方法来实现） 小张的烦恼Java 帝国的FileIO是一个忙碌的家">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-06T16:07:17.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java帝国之拨云见日识回调">
+<meta name="twitter:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   故事背景在日常编程中，我们经常需要对内存的数据进行持久化的工作，把他们保存在硬盘文件或者数据库中。 为了避免重复， 我们通常会把这部分工作封装在一个工具类中， 让各个客户端来调用。 下文的FileIO就是一个简单的工具类（为了简单起见，并没有使用单例或静态方法来实现） 小张的烦恼Java 帝国的FileIO是一个忙碌的家">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaCallback" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java帝国之拨云见日识回调
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-01-05
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>前言</p>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<h2 id="故事背景"><a href="#故事背景" class="headerlink" title="故事背景"></a>故事背景</h2><p>在日常编程中，我们经常需要对内存的数据进行持久化的工作，把他们保存在硬盘文件或者数据库中。</p>
+<p>为了避免重复， 我们通常会把这部分工作封装在一个工具类中， 让各个客户端来调用。</p>
+<p>下文的FileIO就是一个简单的工具类（为了简单起见，并没有使用单例或静态方法来实现）</p>
+<h2 id="小张的烦恼"><a href="#小张的烦恼" class="headerlink" title="小张的烦恼"></a>小张的烦恼</h2><p>Java 帝国的FileIO是一个忙碌的家伙，附近7、8个村落的人都来找他， 请他把数据存储到硬盘里。</p>
+<p>FileIO提供了一个简单的接口， 大家只要告诉他文件名和要保存的字符串内容， 剩下的事就只是等待了，FileIO会完成工作，告诉大家是成功还是失败。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String content)</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            File file = getExistsFile(fileName); </div><div class="line">            writeStrToFile(content, file);</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>比如张家村的小张来请FileIO保存文件的时候是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XiaoZhang</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStr</span><span class="params">()</span> </span>&#123;</div><div class="line">        String fileName = <span class="string">"callback.txt"</span>;</div><div class="line">        String str = <span class="string">"这是一个普通的例子。"</span>;</div><div class="line">        FileIO fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">        <span class="keyword">boolean</span> isSave = fileIO.saveStrToFile(fileName, str);</div><div class="line">        System.out.println(isSave ? <span class="string">"保存成功"</span> : <span class="string">"保存失败"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通常情况下， 小张都会很快拿到返回结果， 高高兴兴的回家。</p>
+<p>但这一次不知道怎么回事， 这个FileIO一直不返回结果， 把小张阻塞了长达1秒钟！</p>
+<p>小张说： “哥们， 怎么回事？ 我这儿都等了1000毫秒了， 还没完？</p>
+<p>FileIO回答 ： ”这不能怪我啊， 你这次的数据量实在是太大了，是谁上传的大文件故意捣乱吧， 对了， 你杀毒没有？“</p>
+<p>“安全问题不用你考虑 “ 小张也有点底气不足 ：”我觉得数据量还行， 也有可能是硬盘这会儿太忙了”</p>
+<p>总之，小张一直阻塞在那里，无法回家。  </p>
+<h2 id="回调"><a href="#回调" class="headerlink" title="回调"></a>回调</h2><p>阻塞的事情发生的多了，极大的影响了小张的工作， 最近这一周的工分可是落后了不少啊， 再这么下去，月底分粮的时候就要饿肚子了， 饿肚子还是小事， 自己喜欢的张二妮看到自己没粮食，估计就找别人去了。。。</p>
+<p>他拎了两瓶好酒去找FileIO商量： “兄弟， 我听说有一种异步保存的办法，  你那边能不能用下？  保存数据的时候起一个线程， 把主线程让回给我，保存好了再通知我，我也不用老是等你，是吧？”</p>
+<p>FIleIO想了想说：“这样确实可以解决问题，但每天找我保存数据的人也很多，而且我也不知道在完成数据的写入之后怎么通知你呢？”</p>
+<p>小张把两瓶好酒往前一推， “我们关系这么好，你再开个专属我的方法呗，我在调用你的saveStrToFile方法的时候顺便把我的实例给你，你搞完之后通过我的实例调用我的方法通知我就行啦。就调我的onResult()这个方法吧。这事要保密， 天知地知你知我知就行了”。</p>
+<p>于是，FileIO为小张开了一个VIP通道：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(<span class="keyword">final</span> String fileName, String content, <span class="keyword">final</span> XiaoZhang xiaoZhang)</span> </span>&#123;</div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    File file = getExistsFile(fileName); </div><div class="line">                    writeStrToFile(content, file);</div><div class="line">                    xiaoZhang.onResult(<span class="keyword">true</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                    xiaoZhang.onResult(<span class="keyword">false</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式很巧妙，小张调用FileIO的saveStrToFile(String,String,XiaoZhang)的时候，把自己的实例通过第三个参数给了FileIO，FileIO开启子线程保存完数据之后，通过XiaoZhang给的实例回调onResult(boolean)方法。</p>
+<p>听起来很绕口，但总结起来就<strong>我调你的方法，你再回调我的方法</strong>。</p>
+<p>后来，JAVA帝国给这种机制取了个名字叫<strong>回调机制</strong>，在帝国中广为人知。</p>
+<h2 id="酒后泄密"><a href="#酒后泄密" class="headerlink" title="酒后泄密"></a>酒后泄密</h2><p>由于有了FileIO的VIP通道，小张处理业务的能力大幅度提升， 工分不但在张家村独占鳌头， 就是算上李家村， 刘家村 等，那也是数一数二的。</p>
+<p>小张一时风光不已，越来越多的人来向他请教秘诀，但小张却笑而不语（这可是成功秘诀，能告诉你们嘛…）。</p>
+<p>有一次， 李家村的小李看到了FileIO有了一个新接口（毕竟都是公开的嘛）， 但是不知道怎么回事， 自己也调用不了， 类型不对啊。</p>
+<p>小李别有用心的请小张和FileIO喝酒， 酒过三巡， 俩人终于吐露了这个秘密。</p>
+<p>这一下子炸开了锅， 虽然Java 帝国规定， 接口的设计一定要规范， 不能乱来， 但是大家蜂拥而至， 要求FileIO 给自己也开VIP通道。</p>
+<p>FileIO实在是没有办法， 无奈之下为小李， 小王等等都开启了VIP通道：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String str, XiaoZhang xiaoZhang)</span> </span>&#123;</div><div class="line">    ... ...<span class="comment">//同上，省略</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String str, XiaoLiu xiaoLiu)</span> </span>&#123;</div><div class="line">    ... ...<span class="comment">//同上，省略</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String str, XiaoWang xiaoWang)</span> </span>&#123;</div><div class="line">    ... ...<span class="comment">//同上，省略</span></div><div class="line">  &#125;</div><div class="line">  ... ...<span class="comment">//非常多</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="村长支招"><a href="#村长支招" class="headerlink" title="村长支招"></a>村长支招</h2><p>随着FileIO开启的VIP通道越来越多，FIleIO发现自己的体积越来越膨胀，自己有大量的代码是在处理这些VIP通道，而且处理方式都差不多，VIP通道多了也就失去其意义了。</p>
+<p>有一次， 张家村德高望重的村长路过FileIO这里，FileIO知道村长软件设计能力了得， 赶紧拉住就行讨教。</p>
+<p>村长果然见(lao)多(jian)识(ju)广(hua)，“小伙子，既然我们村的成员老是需要你的帮助，你就别为每个人开启一个VIP通道，你直接弄一个我们张家村的VIP通道，</p>
+<p>这个通道不是接受张大胖， 张二胖这样的类， 而是接受一个ZhangClient的抽象类。这个抽象类中只有一个方法：onResult</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ZhangClient</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onResult</span><span class="params">(<span class="keyword">boolean</span> isSave)</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每次，有人去找你帮忙的时候，你也不用管具体是谁，只要他实现了ZhangClient，你就知道它有一个onResult（false）的方法，你处理完了之后直接回调它的onResult(boolean)方法就行了，是不是很简单啊，哈哈哈哈哈～～～”</p>
+<p>FileIO听完老村长的话恍然大悟，<strong>这一层解决不了的事，那我们再加一层，在上一层解决呗</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String str, ZhangClient zClient)</span> </span>&#123;</div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    File file = getExistsFile(fileName);</div><div class="line">                    writeStrToFile(str, file);</div><div class="line">                    zClient.onResult(<span class="keyword">true</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                    zClient.onResult(<span class="keyword">false</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XiaoZhang</span> <span class="keyword">extends</span> <span class="title">ZhangClient</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStr</span><span class="params">()</span> </span>&#123;</div><div class="line">        String fileName = <span class="string">"callback.txt"</span>;</div><div class="line">        String str = <span class="string">"这是这个抽象类回调的例子。"</span>;</div><div class="line">        FileIO fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">        fileIO.saveStrToFile(fileName, str, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResult</span><span class="params">(<span class="keyword">boolean</span> isSave)</span> </span>&#123;</div><div class="line">        System.out.println(isSave ? <span class="string">"保存成功"</span> : <span class="string">"保存失败"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如上所示，FileIO表面上回调了ZhangClient 的onResult(false)方法，但实际上回调的是XiaoZhang的onResult(false)方法，因为传进来的实例实际上是继承了ZhangClien的小张（作者：感觉像披着羊皮的狼）。</p>
+<p>后来，帝国将这种利用抽象类去实现回调的方式称之为<strong>抽象类回调</strong>。</p>
+<h2 id="Java-巡视组"><a href="#Java-巡视组" class="headerlink" title="Java 巡视组"></a>Java 巡视组</h2><p>FileIO把其他通道都删除了， 只留了一个ZhangClient通道， 现在他明白老村长的老奸巨猾了。  </p>
+<p>因为李家村的李晓华抱怨说， 我们找你保存个数据， 还得继承一个姓Zhang的类， 实在是太扯了！</p>
+<p>FileIO想了想， 得了， 为了避免引起众怒， 还是改个名称吧, 就叫FileIOClient 。</p>
+<p>即使是这样， 很多人还在抱怨： 我已经继承了一个类了， 怎么可能再继承你这个FileIOClient ？  不继承就没法保存数据， 还有没有王法了！   还有，你这老是改来该去， 把我们都该累死了。</p>
+<p>事情闹大了， 上面派了个巡视组下来解决。</p>
+<p>FileIO战战兢兢的给巡视组诉苦： ”我也实在是没办法啊， 你看Java也不允许多继承， 我昨晚想起一个办法， JAVA类都隐性继承Object，能不能在Object里面增加一个回调的方法？“</p>
+<p>巡视组生气的说：”别做梦了！ java.lang.Object是我们的根， 那是你加方法的地方吗？！  你整天只知道保存数据， 难道都忘了Java帝国的接口（interface）了吗？“</p>
+<p>FileIO被点醒了， 既然继承的方式搞不定，那就接口好了， 接口可以随意实现， 想实现几个就实现几个。</p>
+<p>在巡查组的监视下， FileIO很快修改了代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IFileIOCallback</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onResult</span><span class="params">(<span class="keyword">boolean</span> isSave)</span></span>;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStrToFile</span><span class="params">(String fileName, String str, IFileIOCallback callback)</span> </span>&#123;</div><div class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">try</span> &#123;</div><div class="line">                    File file = getExistsFile(fileName);</div><div class="line">                    writeStrToFile(str, file);</div><div class="line">                    callback.onResult(<span class="keyword">true</span>);</div><div class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                    e.printStackTrace();</div><div class="line">                    callback.onResult(<span class="keyword">false</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;).start();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不幸的是， 大家的代码也都得改一遍，  不过万幸的是， 只需要把extends FileIOClient 改为implements IFileIOCallBack即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XiaoZhang</span> <span class="keyword">implements</span> <span class="title">IFileIOCallback</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveStr</span><span class="params">()</span> </span>&#123;</div><div class="line">        String fileName = <span class="string">"callback.txt"</span>;</div><div class="line">        String str = <span class="string">"这是一个回调的例子。"</span>;</div><div class="line">        FileIO fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">        fileIO.saveStrToFile(fileName, str, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResult</span><span class="params">(<span class="keyword">boolean</span> isSave)</span> </span>&#123;</div><div class="line">        System.out.println(isSave ? <span class="string">"保存成功"</span> : <span class="string">"保存失败"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>后来，帝国将这种利用接口去实现回调机制的方式称之为<strong>接口回调。</strong></p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>张家村的小张有点落寞， 他原来独有的回调方法现在已经被接口回调所替代，他独有的优势已经荡然无存，风光不再。</p>
+<p>更让他烦心的事， 随着FileIO接口的变化， 他的代码也不断地改来改去， 光是修改就耽误了不少事儿，少挣了好多工分。</p>
+<p>不就是一个回调吗， 还继承这个， 实现那个的， 这Java 搞的也太复杂了。</p>
+<p>有小道消息说，Java帝国之外的动态语言王国有个叫Duck Typing 的东西， 实现回调的时候根本不用继承什么东西， 也不用实现什么接口， 只要自己有一个onResult方法， 就可以被调用， 小张好奇心大起，决定去出去闯一闯。</p>
+<p>（完）</p>
+<blockquote>
+<p>Code：<a href="https://github.com/xiaoqinyu0000/Java-Callback" target="_blank" rel="external">https://github.com/xiaoqinyu0000/Java-Callback</a></p>
+</blockquote>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2017年11月07日 00:07</p>
+        <p>原始链接： <a class="post-url" href="/2017/01/06/Java/JavaCallback/" title="Java帝国之拨云见日识回调">https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/&title=《Java帝国之拨云见日识回调》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/&title=《Java帝国之拨云见日识回调》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国之拨云见日识回调》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/01/06/Java/JavaCallback/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故事背景"><span class="post-toc-text">故事背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小张的烦恼"><span class="post-toc-text">小张的烦恼</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#回调"><span class="post-toc-text">回调</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#酒后泄密"><span class="post-toc-text">酒后泄密</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#村长支招"><span class="post-toc-text">村长支招</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Java-巡视组"><span class="post-toc-text">Java 巡视组</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#尾声"><span class="post-toc-text">尾声</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/01/10/Java/JavaSingleton/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java帝国之单例设计模式
+        
+      </span>
+    </a>
+  
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2017 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>

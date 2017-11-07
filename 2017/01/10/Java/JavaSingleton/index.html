@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java帝国之单例设计模式 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="MinHow,MinHow's Blog" />
+  
+  <meta name="description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景在Java帝国，有一个隐蔽的村庄叫IO村，村里每个人都身怀绝技。其中，SocketIO、HttpIO、FileIO更是专注于某个领域的高手。 FileIO，它十余年苦练文件存储技术，雄心壮志，决定走出村庄，去外面闯一闯。 FileIO到了城里，成功的通过了面试，进入一家IO科技责任有限公司，专门负责文件存储等工作">
+<meta name="keywords" content="MinHow,MinHow&#39;s Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java帝国之单例设计模式">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景在Java帝国，有一个隐蔽的村庄叫IO村，村里每个人都身怀绝技。其中，SocketIO、HttpIO、FileIO更是专注于某个领域的高手。 FileIO，它十余年苦练文件存储技术，雄心壮志，决定走出村庄，去外面闯一闯。 FileIO到了城里，成功的通过了面试，进入一家IO科技责任有限公司，专门负责文件存储等工作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-06T16:05:07.037Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java帝国之单例设计模式">
+<meta name="twitter:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景在Java帝国，有一个隐蔽的村庄叫IO村，村里每个人都身怀绝技。其中，SocketIO、HttpIO、FileIO更是专注于某个领域的高手。 FileIO，它十余年苦练文件存储技术，雄心壮志，决定走出村庄，去外面闯一闯。 FileIO到了城里，成功的通过了面试，进入一家IO科技责任有限公司，专门负责文件存储等工作">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">MinHow&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        MinHow&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 WEB 开发的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="MinHow" target="_blank" href="//minhow.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/wongminho">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/WongMinHo">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/huangminhow">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaSingleton" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java帝国之单例设计模式
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-01-10
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>前言</p>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>在Java帝国，有一个隐蔽的村庄叫IO村，村里每个人都身怀绝技。其中，SocketIO、HttpIO、FileIO更是专注于某个领域的高手。</p>
+<p>FileIO，它十余年苦练文件存储技术，雄心壮志，决定走出村庄，去外面闯一闯。</p>
+<p>FileIO到了城里，成功的通过了面试，进入一家IO科技责任有限公司，专门负责文件存储等工作。</p>
+<h3 id="2-懒汉式"><a href="#2-懒汉式" class="headerlink" title="2.懒汉式"></a>2.懒汉式</h3><p>FileIO刚进入公司，工作不久，就接到3、4次投诉，投诉理由是“<strong>在系统中使用FIleIO之后，频繁地发生内存抖动，导致内存吞吐量骤减</strong>”。</p>
+<p>FIleIO大急，连忙查看日志，原来在系统运行中，自己的实例被频繁地创建与销毁。</p>
+<p>FileIO找到主管老张，“我知道怎么解决了，让客户对我的实例进行缓存，不要频繁地创建就行”。</p>
+<p>老张，“我们很难去规定客户怎么用，不过我们可以做一些引导。我看你也不需要创建多个实例，你可以创建一个实例给客户使用FileIO找到主管老张： “咱们能不能给客户说一下， 让客户对我的实例进行缓存，别这么频繁地创建啊”。</p>
+<p>老张，“我们很难去规定客户怎么用，不过我们可以做一些引导。我看你也不需要创建多个实例，你可以创建一个实例给客户使用，不对外开放创建实例的权限就行”。</p>
+<p>FileIO眼睛一亮，赶紧请教老张具体该怎么做。</p>
+<p>老张说：“其实很容易。</p>
+<p>第一、<strong>把自己的构造方法设置为private的</strong>，不让别人new你的实例；</p>
+<p>第二、<strong>提供一个static方法给别人获取你的实例</strong>，你在这个方法里面返回你自己创建的实例就行”。</p>
+<p>FileIO按照老张的思路做了修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> FileIO fileIO;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span> (fileIO == <span class="keyword">null</span>)&#123;</div><div class="line">            fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> fileIO;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">//... ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以后别人在调用FIleIO的时候就不再使用new的方式去创建一个FIleIO的实例，而是调用static方法getInstance()获取FileIO的实例，例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FileIO.getInstance().openFile(fileName);</div></pre></td></tr></table></figure>
+<p>这样一来，FileIO就不会频繁的被创建了。</p>
+<p>后来，FileIO才知道自己的这种实现机制就是“<strong>单例设计模式</strong>”，并且被人称为“<strong>懒汉式</strong>”， 可能是因为在需要的时候才创建吧， 显得很“懒”。</p>
+<h3 id="３-饿汉式"><a href="#３-饿汉式" class="headerlink" title="３.饿汉式"></a>３.饿汉式</h3><p>FileIO使用单例模式修改后解决了问题，在公司例会上被技术总监大大地表扬了一次。</p>
+<p>FileIO非常傲娇，在村里的微信群里向小伙伴们炫耀这件事。</p>
+<p>村里的HttpIO自己也存在类似的问题，也需要自修一下，于是它按照了FileIO在微信群中分享的思路进行修改：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class HttpIO &#123;</div><div class="line">    </div><div class="line">    private static final HttpIO INSTANCE = new HttpIO();</div><div class="line">    </div><div class="line">    private HttpIO()&#123;&#125;</div><div class="line"></div><div class="line">    public static HttpIO getInstance()&#123;</div><div class="line">        return INSTANCE;</div><div class="line">    &#125;</div><div class="line">	//... ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现的方式虽有所不同，但调用方式和效果都是一样的（都能实现单例）。</p>
+<p>HttpIO总觉得自己的实现方式更好， FileIO则说自己的Lazy方式更流行， 毕竟不调用FileIO的话对象就不会创建。</p>
+<p>两人争执不下， 于是就去请教经验丰富的老张。 </p>
+<p>老张说，你们这都是单例设计模式的实现方式，HttpIO的实现方式在单例设计模式中被称为<strong>饿汉式</strong>”（可以能由于太饥饿， 一上来就创建了对象）两者的执行顺序有所不同：</p>
+<ul>
+<li>FileIO的实现在第一次调用的时候先执行了getInstance()方法，再执行构造方法。</li>
+<li>HttpIO的实现在第一次调用的时候先执行了构造方法，再执行getInstance()方法。</li>
+</ul>
+<p>而且，饿汉式是一种线程安全的写法。</p>
+<h3 id="4-线程安全-synchronized"><a href="#4-线程安全-synchronized" class="headerlink" title="4.线程安全(synchronized)"></a>4.线程安全(synchronized)</h3><p>FileIO表示不服， 老张说，我给你举个例子，</p>
+<p>当有多个线程<strong>并发</strong>执行getInstance()的时候，可能会出现以下的情况而导致FileIO产生多个实例。”</p>
+<p>线程一 ： FileIO.getInstance()</p>
+<p>（FileIO:判断fileIO为null，进行fileIO实例的初始化）</p>
+<p>线程二： FileIO.getInstance()</p>
+<p>(FileIO:  fileIO还没初始化完，依然为null, 于是进行另外一个fileIO实例的初始化)</p>
+<p>等到两个线程都返回的时候，其实是创建了两个FileIO的实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">线程一-&gt;FileIO:getInstance()</div><div class="line">Note left of FileIO:判断fileIO为null，进行fileIO实例的初始化</div><div class="line">线程二-&gt;FileIO:getInstance()</div><div class="line">Note right of FileIO:fileIO还没初始化完，进行fileIO实例的初始化</div><div class="line">FileIO--&gt;线程一:返回线程一创建的fileIO实例</div><div class="line">FileIO--&gt;线程二:返回线程二创建的fileIO实例</div></pre></td></tr></table></figure>
+<p>FileIO恍然大悟，线程安全可得好好重视，好在以前研究过一点线程安全的问题，直接加上synchronized：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> FileIO fileIO;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">if</span> (fileIO == <span class="keyword">null</span>)&#123;</div><div class="line">            fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> fileIO;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//... ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样一来，当有两个线程同时执行getInstance()方法的时候，<strong>一旦线程一获取到FileIO.class锁，线程二只能在外面等待着</strong>。</p>
+<p>在线程一执行完getInstance()的逻辑后释放FileIO.class锁，其他线程才能获取这个锁进入getInstance()方法中。</p>
+<p>这样就避免了创建两个FileIO的实例</p>
+<p>流程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">线程一-&gt;FileIO:getInstance()</div><div class="line">Note left of FileIO:获取锁FileIO.class</div><div class="line">Note left of FileIO:判断fileIO为null，进行fileIO实例的初始化</div><div class="line">线程二-&gt;FileIO:getInstance()</div><div class="line">Note right of FileIO:锁FileIO.class被持有，进入失败，等待中</div><div class="line">FileIO--&gt;线程一:返回线程一创建的fileIO实例</div><div class="line">NOte left of FileIO:释放锁FileIO.class</div><div class="line">线程二-&gt;FileIO:getInstance()</div><div class="line">Note right of FileIO:获取到锁FileIO.class，进入</div><div class="line">FileIO--&gt;线程二:返回线程二创建的fileIO实例</div></pre></td></tr></table></figure>
+<h3 id="5-线程安全-双重检验锁"><a href="#5-线程安全-双重检验锁" class="headerlink" title="5.线程安全-双重检验锁"></a>5.线程安全-双重检验锁</h3><p>老张锊一锊胡须，道：“这种做法简单明了，确实保证了线程安全， 还能更优化呢！”</p>
+<p>FileIO不服气，“我不信，难道还有比我只加一个synchronized更简单的做法？”。</p>
+<p>老张笑了一下，“我说的优化并不是指简单化。你想想啊，如果fileIO实例不为空时，还需要使用synchronized来限制执行时只能一个线程进入吗？来来来，老哥给你露一手。”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> FileIO fileIO;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (fileIO == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">synchronized</span> (FileIO.class) &#123;</div><div class="line">                <span class="keyword">if</span> (fileIO == <span class="keyword">null</span>) &#123;</div><div class="line">                    fileIO = <span class="keyword">new</span> FileIO();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> fileIO;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//... ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>“我这招江湖人称”双重检验锁“，够酷吧！”。</p>
+<p>“老司机就是复杂，好端端的，被你弄了那么多个fileIO == null的判断，还用volatile关键字修饰fileIO，这样真的能提升性能吗？”</p>
+<p>“you look，当有多有线程调用getInstance()方法的时候，不管三七二十一，先让他们进来。如果fileIO实例不为空，那最好了，直接return实例fileIO，跟synchronized一点都扯不上关系，所以也不会影响到性能。这是双重检验中的第一次检验。”</p>
+<p>“oh，I know，如果fileIO是null的，就进入synchronized语句块，在synchronized语句块里面初始化对象。但为什么在synchronized语句中需要再次检查fileIO实例是否为null？”</p>
+<p>“这就是第二次检验了，当有多个线程通过第一次检验时，假设线程拿到锁进入synchronized语句块，对fileIO实例进行初始化，释放FileIO.class锁之后，线程二持有这个锁进入synchronized语句块，此时又对fileIO对象就行初始化。所以在这里进行第二次检验防止这种意外发生。”</p>
+<p>“我理解了，但我不明白fileIO为什么要用volatile关键字修饰？”</p>
+<p>“我们假设线程一进入第二次检验之后就执行FileIO fileIO = new FIleIO()操作，在这个操作中，JVM主要干了三件事</p>
+<p>1、在堆空间里分配一部分空间；</p>
+<p>2、执行FileIO的构造方法进行初始化；</p>
+<p>3、把fileIO对象指向在堆空间里分配好的空间。</p>
+<p>但是，当我们编译的时候，编译器在生成汇编代码的时候会对流程顺序进行优化。优化的结果是有可能按照1-2-3顺序执行，也可能按照1-3-2顺序执行。</p>
+<p>我们知道，执行完3的时候就fileIO对象就已经不为空了，如果是按照1-3-2的顺序执行，恰巧在执行到3的时候（还没执行2），突然跑来了一个线程，进来getInstance()方法之后判断fileIO不为空就返回了fileIO实例。</p>
+<p>此时fileIO实例虽不为空，但它还没执行构造方法进行初始化。又恰巧构造方法里面需要对某些参数进行初始化。后来闯进来的线程糊里糊涂对那些需要初始化的参数进行操作就有可能报错奔溃了。”</p>
+<h3 id="6-线程安全-静态内部类"><a href="#6-线程安全-静态内部类" class="headerlink" title="6.线程安全-静态内部类"></a>6.线程安全-静态内部类</h3><p>“弄一个单例模式要这么麻烦，写这么多代码，我还是使用饿汉式单例模式算了！”，FileIO抱怨说。</p>
+<p>老张笑着说，“那也不能这么想呀，其实我们可以根据使用场景不同来使用不一样的单例模式。如果我们需要在getInstance()方法的时候传入参数进来辅助构造方法初始化，那就得用懒汉式了，比如：“</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">(<span class="keyword">long</span> maxFileSize)</span></span>;</div></pre></td></tr></table></figure>
+<p>FileIO一想，也对，其他情况就可以使用饿汉式了。</p>
+<p>老张好像看出FileIO的想法，道：”其实饿汉式也有其他弊端，比如当我们不想获取FileIO的实例而是想获取其中一个全局变量的时候，在类加载的时候还是会对fileIO实例进行初始化，导致时间比较久。举例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String TYPE_MP3 = <span class="string">".mp3"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> FileIO INSTANCE = <span class="keyword">new</span> FileIO();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> INSTANCE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//... ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当调用FileIO.TYPE_MP3的时候，INSTANCE实例也会被初始化，这显然不是我们需要的。所以，我们Java帝国的高手们又想出了一种叫静态内部类的单例模式，它简单又保证实例能进行懒加载。”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIOHolder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> FileIO INSTANCE = <span class="keyword">new</span> FileIO();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> FileIOHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//... ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>FileIO眼睛一亮，“这个我能理解，当执行getInstance()方法的时候就去调用FileIOHolder内部类里面的INSTANCE实例，此时FileIOHolder内部类会被加载到内存里，在类加载的时候就对INSTANCE实例进行初始化。和饿汉式一个道理，保证了只有一个实例，而且在调用getInstance()方法的时候才进行INSTANCE实例的初始化，又具有懒汉式的部分特性。”</p>
+<p>老张满意地说，“是的，但这种写法是利用JVM的机制完成的，在其他语言不一样适用哦！”</p>
+<h3 id="7-黑客破坏-反射和反序列化"><a href="#7-黑客破坏-反射和反序列化" class="headerlink" title="7.黑客破坏-反射和反序列化"></a>7.黑客破坏-反射和反序列化</h3><p>听了老张一堂课，FileIO收获匪浅，这些都是以前在村里老村长没讲过的一些技巧，它非常高兴，仿佛看到自己在以后踏上人生巅峰、迎娶白富美的样子。</p>
+<p>老张决定给它泼泼冷水，“还没完呢，在我们Java帝国，有很多被称为黑客的家伙，他们经常搞破坏，你如果只按照上面介绍的写法使用单利模式，很有可能被破坏哦！”</p>
+<p>FileIO愣住了，接着问，“那怎么办呀，他们都是怎么破坏的？”。</p>
+<p>老张故作深沉地答，”其实他们的破坏方式无非就是这两种：</p>
+<ul>
+<li><p>反射调用构造方法初始化新的变量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">newInstance</span><span class="params">()</span> <span class="keyword">throws</span> IllegalAccessException, InstantiationException </span>&#123;</div><div class="line">        FileIO fileIO = FileIO.class.newInstance();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>序列化和反序列化产生新的实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">serializable</span><span class="params">()</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</div><div class="line">        ObjectOutputStream oos = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(fileName));</div><div class="line">        oos.writeObject(FileIO.getInstance());</div><div class="line">        File file = <span class="keyword">new</span> File(fileName);</div><div class="line">        ObjectInputStream ois =  <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(file));</div><div class="line">        FileIO fileIO = (FileIO) ois.readObject();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对于通过反射调用构造方法的破坏方式我们可以通过在增加全局变量flag，在第一次初始化的时候就设置为true，第二次初始化的时候判断到flag为true就抛出异常。但这种办法也只能避免破坏，无法彻底阻止，因为他们可以反射flag来修改flag的值。</p>
+<p>对于使用序列化和反序列化产生新的实例的方式就容易避免了，可以增加readResolve()方法来预防。我们使用静态内部类的方式来演示如何避免：”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIO</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">FileIOHolder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> FileIO INSTANCE = <span class="keyword">new</span> FileIO();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">FileIO</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FileIO <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> FileIOHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> FileIOHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>FileIO不解：”为什么增加readResolve()方法并在里面返回之前创建好的实例就可以避免被反序列破坏呢？“</p>
+<p>“这是反序列化机制决定的， 在反序列化的时候会判断如果实现了serializable 或者 externalizable接口的类中又包含readResolve()方法的话，会直接调用readResolve()方法来获取实例。”，老张解释道。</p>
+<h3 id="8-终极招数-枚举"><a href="#8-终极招数-枚举" class="headerlink" title="8.终极招数-枚举"></a>8.终极招数-枚举</h3><p>FileIO叹一叹气，”虽然单例看起来简单， 但是要弄一个完美的单例模式还是比较麻烦的！“</p>
+<p>老张眨了眨眼，“我还有终极招数呢！”</p>
+<p>“咦！”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> FileIO &#123;</div><div class="line"></div><div class="line">    INSTANCE;</div><div class="line"></div><div class="line">    <span class="comment">//... ...</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> File <span class="title">openFile</span><span class="params">(String fileName)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> getFile(fileName);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>“简单吧，这种单例模式是利用<strong>枚举</strong>来实现的，在调用的时候直接：”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FileIO.INSTANCE.openFile(fileName);</div></pre></td></tr></table></figure>
+<p>FileIO看着简单又陌生的自己，向老张投去疑惑又质疑的眼神。</p>
+<p>老张解释：“别看你现在是枚举类型，但实际上反编译可知枚举实际上就是一个继承Enum的类。所以你的本质还是一个类，因为枚举的特点，你只会有一个实例，同时保证了线程安全、反射安全和反序列化安全。”</p>
+<p>FileIO感慨，原来单例也可以这么简单，“你妹的老张，有这么简单的方法你不早告诉我。”</p>
+<p>“我们重在过程，不在结果。”</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2017年11月07日 00:05</p>
+        <p>原始链接： <a class="post-url" href="/2017/01/10/Java/JavaSingleton/" title="Java帝国之单例设计模式">https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/&title=《Java帝国之单例设计模式》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/&title=《Java帝国之单例设计模式》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国之单例设计模式》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/01/10/Java/JavaSingleton/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-懒汉式"><span class="post-toc-text">2.懒汉式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#３-饿汉式"><span class="post-toc-text">３.饿汉式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-线程安全-synchronized"><span class="post-toc-text">4.线程安全(synchronized)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#5-线程安全-双重检验锁"><span class="post-toc-text">5.线程安全-双重检验锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#6-线程安全-静态内部类"><span class="post-toc-text">6.线程安全-静态内部类</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#7-黑客破坏-反射和反序列化"><span class="post-toc-text">7.黑客破坏-反射和反序列化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#8-终极招数-枚举"><span class="post-toc-text">8.终极招数-枚举</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/11/07/Java/JavaObservable/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          JavaObservable
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2017/01/06/Java/JavaCallback/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国之拨云见日识回调</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2017 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
