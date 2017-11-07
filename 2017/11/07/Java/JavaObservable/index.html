@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>JavaObservable | DevQin的技术博客</title>
+  <title>Java设计模式之观察者模式 | DevQin的技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="MinHow,MinHow's Blog" />
@@ -11,14 +11,14 @@
   <meta name="description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”火车上，老王跟大胖聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，一开始我还真没觉得他们有什么了不起的。直到最近，在他们的帮助下，我">
 <meta name="keywords" content="Java、Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaObservable">
+<meta property="og:title" content="Java设计模式之观察者模式">
 <meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/index.html">
 <meta property="og:site_name" content="DevQin的技术博客">
 <meta property="og:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”火车上，老王跟大胖聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，一开始我还真没觉得他们有什么了不起的。直到最近，在他们的帮助下，我">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-07T07:11:31.464Z">
+<meta property="og:updated_time" content="2017-11-07T07:21:53.890Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaObservable">
+<meta name="twitter:title" content="Java设计模式之观察者模式">
 <meta name="twitter:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”火车上，老王跟大胖聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，一开始我还真没觉得他们有什么了不起的。直到最近，在他们的帮助下，我">
   
   
@@ -117,7 +117,7 @@
         
   
     <h1 class="post-title" itemprop="name">
-      JavaObservable
+      Java设计模式之观察者模式
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -208,8 +208,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2017年11月07日 15:11</p>
-        <p>原始链接： <a class="post-url" href="/2017/11/07/Java/JavaObservable/" title="JavaObservable">https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/</a></p>
+        <p>最后更新： 2017年11月07日 15:21</p>
+        <p>原始链接： <a class="post-url" href="/2017/11/07/Java/JavaObservable/" title="Java设计模式之观察者模式">https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/</a></p>
         <footer>
             <a href="https://xiaoqinyu0000.github.io">
                 <img src="/images/logo.png" alt="DevQin">
@@ -231,7 +231,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&title=《JavaObservable》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&title=《Java设计模式之观察者模式》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -241,7 +241,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&title=《JavaObservable》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&title=《Java设计模式之观察者模式》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -251,7 +251,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JavaObservable》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java设计模式之观察者模式》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
