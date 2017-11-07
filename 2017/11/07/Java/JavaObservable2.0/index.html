@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java设计模式之观察者模式2.0 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Java、Android" />
+  
+  <meta name="description" content="观察者模式1.背景​    我是一个Java类，他们都叫我UserAction。 ​    我的本职工作是负责用户登录和用户注销的操作。 ​    但随着业务迭代，我的工作重心一直不在本职工作上。 ​    一开始，用户登录之后我只需要找到数据库管理员（DBContext），把用户数据给他，他就会保存在数据库里。 1DBContext.saveLoginUser(userBean); ​    后">
+<meta name="keywords" content="Java、Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java设计模式之观察者模式2.0">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="观察者模式1.背景​    我是一个Java类，他们都叫我UserAction。 ​    我的本职工作是负责用户登录和用户注销的操作。 ​    但随着业务迭代，我的工作重心一直不在本职工作上。 ​    一开始，用户登录之后我只需要找到数据库管理员（DBContext），把用户数据给他，他就会保存在数据库里。 1DBContext.saveLoginUser(userBean); ​    后">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-07T17:11:43.314Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java设计模式之观察者模式2.0">
+<meta name="twitter:description" content="观察者模式1.背景​    我是一个Java类，他们都叫我UserAction。 ​    我的本职工作是负责用户登录和用户注销的操作。 ​    但随着业务迭代，我的工作重心一直不在本职工作上。 ​    一开始，用户登录之后我只需要找到数据库管理员（DBContext），把用户数据给他，他就会保存在数据库里。 1DBContext.saveLoginUser(userBean); ​    后">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">DevQin Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        DevQin Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        DevQin的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="DevQin" target="_blank" href="//https://xiaoqinyu0000.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//https://github.com/xiaoqinyu0000">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//https://weibo.com/u/3581941953?refer_flag=1001030101_">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//https://twitter.com/xiaoqinyu0000">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaObservable2.0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java设计模式之观察者模式2.0
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-11-07
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>​    我是一个Java类，他们都叫我<strong>UserAction</strong>。</p>
+<p>​    我的本职工作是负责用户登录和用户注销的操作。</p>
+<p>​    但随着业务迭代，我的工作重心一直不在本职工作上。</p>
+<p>​    一开始，用户登录之后我只需要找到数据库管理员（DBContext），把用户数据给他，他就会保存在数据库里。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DBContext.saveLoginUser(userBean);</div></pre></td></tr></table></figure>
+<p>​    后来，聊天比较火，村里来了个管理聊天的小伙伴（IMContext），我得把用户数据给他初始化聊天系统：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DBContext.saveLoginUser(userBean);</div><div class="line">IMContext.init(userBean);</div></pre></td></tr></table></figure>
+<p>​    再后来，各个村都在玩电商，村长下令我们村也要搞一点电商，电商的小伙伴（StoreContext）找到我，跟我说用户登录了要把用户数据给他，他需要去获取用户订单、优惠、购物车…：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">DBContext.saveLoginUser(userBean);</div><div class="line">IMContext.init(userBean);</div><div class="line">StoreContext.init(userBean);</div></pre></td></tr></table></figure>
+<p>​    NND，村里搞一个活动，加一个服务，我就得跟着改动。</p>
+<h3 id="2-使用Observable和Observer实现一个发布-订阅模型"><a href="#2-使用Observable和Observer实现一个发布-订阅模型" class="headerlink" title="2.使用Observable和Observer实现一个发布/订阅模型"></a>2.使用Observable和Observer实现一个发布/订阅模型</h3><p>​    有一次，城里的采购队来到村里，我跟他们打听到城里有一对双胞胎叫Observable和Observer，他们擅长处理一个类与多个类的交互。</p>
+<p>​    我决定连夜进程，夜访它们。</p>
+<p>​    Observable和Observer听完我的叙述之后，哈哈大笑，给我讲了一个小故事：</p>
+<blockquote>
+<p>你知道在城里，大家是怎么收到最新报纸发布的通知吗？</p>
+<p>他们只需要去报社，把自己的号码留下来，新的报纸一来，报社就按照通讯录的号码通知大家，不管有多少人，报社才一份通讯录，报社才不管谁跟谁呢。</p>
+</blockquote>
+<p>​    城里的人果然先进呀，我也要搞一本通讯录，让村里需要得到用户登录消息的类来我这边留下号码，我按号码通知就行。    </p>
+<p>​    Observable满意地看着我说：“只要每月5J币，我们兄弟帮你处理所有记录号码和通知的细节”。</p>
+<p>​    本着时间就是金钱的原则，我跟村长申请了5J币经费。</p>
+<p>​    他们让我继承Observable，并在用户登录之后调用notifyObservers(Object o)方法进行通知：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAction</span> <span class="keyword">extends</span> <span class="title">Observable</span> </span>&#123;</div><div class="line">    </div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loginSuccess</span><span class="params">(UserBean userBean)</span> </span>&#123;</div><div class="line">      setChanged();	<span class="comment">//告诉Observable，要通知了。</span></div><div class="line">    	notifyObservers(userBean); <span class="comment">//请按照通讯录把userBean通知给它们</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    我们需要找一名试验者，DBContext自告奋勇。</p>
+<p>​    首先，它须要实现Observer接口，重写update(Observable observable, Object o)方法。</p>
+<p>​    o参数就是就是我之前通知时的userBean。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBContext</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</div><div class="line">    </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Observable observable, Object o)</span> </span>&#123;</div><div class="line">       <span class="keyword">if</span>(o <span class="keyword">instanceof</span> UserBean)&#123; <span class="comment">//登录成功</span></div><div class="line">        	insertUserDB((UserBean)o);</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    接下来，它就要来我这里登记号码了，登记号码用的是Observable提供的addObserver(Observer o)方法： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBContext</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DBContext</span><span class="params">(UserBean userBean)</span></span>&#123;</div><div class="line">      userAction.addObserver(<span class="keyword">this</span>);	<span class="comment">//订阅操作</span></div><div class="line">  &#125;</div><div class="line">    </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Observable observable, Object o)</span> </span>&#123;</div><div class="line">      ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    我们试了N遍，每次我一调用notifyObservers(userBean)，DBContext的update方法就能接收到userBean，它们双胞胎兄弟活不赖嘛！</p>
+<p>​    更爽的是，以后谁想得到用户登录的通知，只需：implements Observer —&gt; 调用addObserver(Observer o)方法在我这里留下联系方式就行。</p>
+<p>​    我再也不用被动地修改代码。</p>
+<h3 id="3-自定义一个发布-订阅模型"><a href="#3-自定义一个发布-订阅模型" class="headerlink" title="3.自定义一个发布/订阅模型"></a>3.自定义一个发布/订阅模型</h3><p>​    有一天村长找到我：“这5J币1个月实在太贵了，你能不能想想办法。实在不行，还是和以前一样…你辛苦点。不然城里越来越有钱，我们村越来越穷，我这村长…balabala…”</p>
+<p>​    我肯定不愿意回到以前的生活，我决定自己处理登记号码和通知的细节：</p>
+<p>​    模仿Observer接口，我也搞了一个接口： </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IUserActionEvents</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">onLoginEvent</span><span class="params">(UserBean userBean)</span></span>;		<span class="comment">//用户登录</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    找来基友DBContext同志，让他换个接口实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBContext</span> <span class="keyword">implements</span> <span class="title">IUserActionEvents</span></span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoginEvent</span><span class="params">(UserBean userBean)</span></span>&#123;</div><div class="line">    insertUserDB(userBean);	<span class="comment">//用户登录，把用户数据插入数据库</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    我搞个List来做通讯录，再搞了一个addUserActionSubscribe(IUserActionEvents userActionEvents)方法，只要是IUserActionEvents对象就可以调用这个方法来登记，在用户登录之后遍历这个通讯录进行通知：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAction</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="keyword">private</span> List&lt;IUserActionEvents&gt; mUserActionEvents = <span class="keyword">new</span> ArrayList();	<span class="comment">//通讯录</span></div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addUserActionSubscribe</span><span class="params">(IUserActionEvents userActionEvents)</span> </span>&#123;</div><div class="line">    mUserActionEvents.add(userActionEvents);	<span class="comment">//登记到通讯录中</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loginSuccess</span><span class="params">(UserBean userBean)</span> </span>&#123;</div><div class="line">     <span class="keyword">for</span>(IUserActionEvents userActionEvent: mUserActionEvents) &#123;</div><div class="line">       userActionEvent.onLoginEvent(userBean);  <span class="comment">//按照通讯录拿出一个个IUserActionEvents对象，我虽然不知道它们是谁，但它们有onLoginEvent(UserBean userBean)方法，我调用这个方法就行。</span></div><div class="line">     &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    DBContext调用addUserActionSubscribe(IUserActionEvents userActionEvents)进行登记：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBContext</span> <span class="keyword">implements</span> <span class="title">IUserActionEvents</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DBContext</span><span class="params">(UserAction userAction)</span></span>&#123;</div><div class="line">    userAction.addUserActionSubscribe(<span class="keyword">this</span>);	<span class="comment">//登记</span></div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoginEvent</span><span class="params">(UserBean bean)</span></span>&#123;</div><div class="line">    insertUserDB(bean);	<span class="comment">//用户登录</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>​    经过几次实验，自定义的效果非常好，甚至比购买Observable兄弟的服务还好，也给村里省下一大笔钱，村长也表扬了我。</p>
+<p>​    后来我跟Observable兄弟讨论我的方法，他们说其实和他们一样，不过他们使用Vertor替代List，在方法中加入synchronized来处理线程的同步。</p>
+<p>​    后来，帝国对Observable兄弟进行招安，也正式把这种多对一的订阅关系称为<strong>订阅/发布模型</strong>，也叫<strong>观察者模式</strong>。像DBContext这种观察某个事件发生的类被称为<strong>观察者</strong>，而像UserAction这种发布消息的类称为<strong>被观察者</strong>。</p>
+<h3 id="4-附录："><a href="#4-附录：" class="headerlink" title="4.附录："></a>4.附录：</h3><ul>
+<li>Observable源码</li>
+<li>Observer源码</li>
+</ul>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2017年11月08日 01:11</p>
+        <p>原始链接： <a class="post-url" href="/2017/11/07/Java/JavaObservable2.0/" title="Java设计模式之观察者模式2.0">https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/&title=《Java设计模式之观察者模式2.0》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/&title=《Java设计模式之观察者模式2.0》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java设计模式之观察者模式2.0》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable2.0/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#观察者模式"><span class="post-toc-text">观察者模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-使用Observable和Observer实现一个发布-订阅模型"><span class="post-toc-text">2.使用Observable和Observer实现一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-自定义一个发布-订阅模型"><span class="post-toc-text">3.自定义一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-附录："><span class="post-toc-text">4.附录：</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/11/07/Java/JavaObservable1.0/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java设计模式之观察者模式
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2017/01/10/Java/JavaSingleton/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国之单例设计模式</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2017 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
