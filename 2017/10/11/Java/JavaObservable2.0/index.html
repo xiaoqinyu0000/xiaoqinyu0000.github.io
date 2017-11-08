@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java设计模式之观察者模式 | DevQin的技术博客</title>
+  <title>Java帝国设计模式之观察者设计模式2.0 | DevQin的技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="Java、Android" />
   
-  <meta name="description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！">
+  <meta name="description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，">
 <meta name="keywords" content="Java、Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java设计模式之观察者模式">
-<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/index.html">
+<meta property="og:title" content="Java帝国设计模式之观察者设计模式2.0">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/index.html">
 <meta property="og:site_name" content="DevQin的技术博客">
-<meta property="og:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！">
+<meta property="og:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-07T15:42:45.875Z">
+<meta property="og:updated_time" content="2017-11-08T16:01:24.803Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java设计模式之观察者模式">
-<meta name="twitter:description" content="观察者模式1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！">
+<meta name="twitter:title" content="Java帝国设计模式之观察者设计模式2.0">
+<meta name="twitter:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。 ​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。 ​    千万别小看他们，我呀，">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -110,20 +110,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-Java/JavaObservable1.0" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaObservable2.0" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      Java设计模式之观察者模式
+      Java帝国设计模式之观察者设计模式2.0
     </h1>
     <div class="post-title-bar">
       <ul>
           
         <li>
-          <i class="fa fa-calendar"></i>  2017-11-07
+          <i class="fa fa-calendar"></i>  2017-10-10
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -139,7 +139,14 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。</p>
+            <blockquote>
+<p>前言</p>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>​    “嗨！老王，听说咱们村来了一对长得很像的双胞胎？”小胖和老王聊着八卦。</p>
 <p>​    “哈哈，你说的是Observable和Observer吧！他们虽然长得很像，但是他们功能可大大不同哟，老大Observable可是一个标准的Java类，而老二Observer却是一个接口。</p>
 <p>​    千万别小看他们，我呀，就是在他们的帮助下，这班也不用加了，觉也睡得安稳，整个人年轻了不少！”</p>
 <p>​    小胖被老王说得心痒痒，思绪万千，想着如果能从老王这里讨来一两招，那自己以后就可以早点下班回去陪小美，嘴角露出了一抹笑意。</p>
@@ -209,8 +216,8 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2017年11月07日 23:42</p>
-        <p>原始链接： <a class="post-url" href="/2017/11/07/Java/JavaObservable1.0/" title="Java设计模式之观察者模式">https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/</a></p>
+        <p>最后更新： 2017年11月09日 00:01</p>
+        <p>原始链接： <a class="post-url" href="/2017/10/11/Java/JavaObservable2.0/" title="Java帝国设计模式之观察者设计模式2.0">https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/</a></p>
         <footer>
             <a href="https://xiaoqinyu0000.github.io">
                 <img src="/images/logo.png" alt="DevQin">
@@ -232,7 +239,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/&title=《Java设计模式之观察者模式》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/&title=《Java帝国设计模式之观察者设计模式2.0》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -242,22 +249,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/&title=《Java设计模式之观察者模式》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/&title=《Java帝国设计模式之观察者设计模式2.0》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java设计模式之观察者模式》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之观察者设计模式2.0》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -267,7 +274,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/11/07/Java/JavaObservable1.0/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/10/11/Java/JavaObservable2.0/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -285,16 +292,26 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#观察者模式"><span class="post-toc-text">观察者模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-使用Observable和Observer实现一个发布-订阅模型"><span class="post-toc-text">2.使用Observable和Observer实现一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-自定义一个发布-订阅模型"><span class="post-toc-text">3.自定义一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-附录："><span class="post-toc-text">4.附录：</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-使用Observable和Observer实现一个发布-订阅模型"><span class="post-toc-text">2.使用Observable和Observer实现一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-自定义一个发布-订阅模型"><span class="post-toc-text">3.自定义一个发布/订阅模型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-附录："><span class="post-toc-text">4.附录：</span></a></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
+    <a href="/2017/11/08/Java/JavaObservable3.0/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java帝国设计模式之观察者设计模式3.0
+        
+      </span>
+    </a>
   
-    <a href="/2017/11/07/Java/JavaObservable2.0/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Java设计模式之观察者模式2.0</span>
+  
+    <a href="/2017/03/31/Java/JavaObservable1.0/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国设计模式之观察者设计模式1.0</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java帝国设计模式之观察者设计模式1.0 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Java、Android" />
+  
+  <meta name="description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景1978年，Java帝国张家村新一任村长谋权篡位成功，他废弃20多秒的闭关锁村政策。从此，张家村从封闭走向开放，并与村外世界逐渐接触。也因此，陆陆续续有一些年轻人走出村庄，前往更大的舞台一展身手。 事情就发生在与村外的收寄信上… 2.信使我是SMSContext，中文名叫信使。自从张家村改革开放以来，我便在村里负">
+<meta name="keywords" content="Java、Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java帝国设计模式之观察者设计模式1.0">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景1978年，Java帝国张家村新一任村长谋权篡位成功，他废弃20多秒的闭关锁村政策。从此，张家村从封闭走向开放，并与村外世界逐渐接触。也因此，陆陆续续有一些年轻人走出村庄，前往更大的舞台一展身手。 事情就发生在与村外的收寄信上… 2.信使我是SMSContext，中文名叫信使。自从张家村改革开放以来，我便在村里负">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-08T15:59:03.750Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java帝国设计模式之观察者设计模式1.0">
+<meta name="twitter:description" content="前言  本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景1978年，Java帝国张家村新一任村长谋权篡位成功，他废弃20多秒的闭关锁村政策。从此，张家村从封闭走向开放，并与村外世界逐渐接触。也因此，陆陆续续有一些年轻人走出村庄，前往更大的舞台一展身手。 事情就发生在与村外的收寄信上… 2.信使我是SMSContext，中文名叫信使。自从张家村改革开放以来，我便在村里负">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">DevQin Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        DevQin Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        DevQin的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="DevQin" target="_blank" href="//https://xiaoqinyu0000.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//https://github.com/xiaoqinyu0000">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//https://weibo.com/u/3581941953?refer_flag=1001030101_">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//https://twitter.com/xiaoqinyu0000">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaObservable1.0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java帝国设计模式之观察者设计模式1.0
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2017-03-30
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<p>前言</p>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<h3 id="1-背景"><a href="#1-背景" class="headerlink" title="1.背景"></a>1.背景</h3><p>1978年，Java帝国张家村新一任村长谋权篡位成功，他废弃20多秒的闭关锁村政策。从此，张家村从封闭走向开放，并与村外世界逐渐接触。也因此，陆陆续续有一些年轻人走出村庄，前往更大的舞台一展身手。</p>
+<p>事情就发生在与村外的收寄信上…</p>
+<h3 id="2-信使"><a href="#2-信使" class="headerlink" title="2.信使"></a>2.信使</h3><p>我是SMSContext，中文名叫信使。自从张家村改革开放以来，我便在村里负责张家村和外面各大村落的通讯工作。</p>
+<p>张二妮每天都往我这里跑，每次都说来看望我，但我知道醉翁之意不在酒啊！</p>
+<p>因为村里的小张为了研究Duck Typing前往了Ruby帝国（具体可看：<a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc0NzExNg==&amp;mid=2665513495&amp;idx=1&amp;sn=131e44bde551033e915b4306249a463f&amp;chksm=80d67a54b7a1f34271fa832a6fd3048b2d4dc40772e32d82112a3d61fbd62ceb1ccd8f69893f&amp;scene=0&amp;key=db3879a5415323d904ce949189051973eb146bdcf1d3d5a2279661008d1c91a98634d9abeb3d65aee7ae408dbfc9bc710bcf74ccd69c44f73591831489eb7be677195b0c4bd7404acc59a5201f681597&amp;ascene=0&amp;uin=MTc5NTA5NzUwNA%3D%3D&amp;devicetype=iMac+Macmini7%2C1+OSX+OSX+10.11.6+build(15G1217" target="_blank" rel="external">小张的Duck Typing</a>&amp;version=12010310&amp;nettype=WIFI&amp;fontScale=100&amp;pass_ticket=aKnCljgU9ca1m%2FcmuCmyv%2FaDVxtblHOOEWhah9ER9AEOwKRBgBPTDWLuy%2FieXyTy)），每隔一段时间便给张二妮写信。</p>
+<p>所以张二妮是来我这，其实是想看看有没有小张的来信。</p>
+<p>像张二妮这样每天跑来看看有没有来信的人还真不少，我想了想，利用之前小张和FileIO搞出来的接口回调原理，搞一套消息回调机制，这样就不用他们来回跑了，有信的时候我直接通知他们就好了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SMSCallback</span></span>&#123;</div><div class="line">  	<span class="function"><span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(Message msg)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我开放了一个这样的接口，让需要被通知的人实现这个接口，然后往我这边注册就行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SMSContext</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="keyword">private</span> SMSCallback mSMSCallback;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(SMSCallback callback)</span>  </span>&#123;</div><div class="line">  	<span class="keyword">this</span>.mSMSCallback = callback;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果有来信的话，我就调用SMSCallback接口的onMessage方法通知注册者：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">onNextMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span>(<span class="keyword">null</span> != mSMSCallback)&#123;</div><div class="line">    mSMSCallback.onMessage(msg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当我想把这套机制推广的时候，我突然意识到我只有一个实例。</p>
+<p>因为别的村要把来我们村的信给我，而村里的人又得从我这里取信。</p>
+<p>所以我实现了单例设计模式。</p>
+<p>而如果有两个人都想往我这注册的时候，第二个注册的人会把第一个覆盖掉。比如张二妮和张小花都想往我这注册：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SMSContext.getInstance().register(zhangErNi);</div><div class="line">SMSContext.getInstance().register(zhangXiaoHua);</div></pre></td></tr></table></figure>
+<p>而我每次都是</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.mSMSCallback = callback;</div></pre></td></tr></table></figure>
+<p>这样张小花的实例就会把张二妮的实例给覆盖掉。</p>
+<p>这样可不行，为了让大家都能接收到通知，我得弄个List来存储注册的人：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SMSContext</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="keyword">private</span> List&lt;SMSCallback&gt; mCallbackList = <span class="keyword">new</span> ArrayList();</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SMSContext</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(SMSCallback callback)</span>  </span>&#123;</div><div class="line">  	<span class="keyword">this</span>.mCallbackList.add(callback);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>修改之后，每次有新的信息来了，我就遍历这个List，然后进行通知：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">onNextMessage</span><span class="params">(Message msg)</span> </span>&#123;</div><div class="line">  <span class="keyword">for</span>(SMSCallback callback: mCallbackList)&#123;</div><div class="line">    callback.onMessage(msg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果注册者判断消息是发给自己的，就进行处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZhangErNi</span> <span class="keyword">implements</span> <span class="title">SMSCallback</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMessage</span><span class="params">(Message msg)</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(<span class="string">"ZhangErNi"</span>.equals(msg.getTarName()))&#123;</div><div class="line">      <span class="comment">//处理</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>推行了一段时间，从大家的反馈上，效果还不错。</p>
+<p>虽然实现起来非常容易，但也呈现了一种思想。</p>
+<p>我把这种思想称为”<strong>观察者设计模式</strong>“。</p>
+<p>换个角度来说，就相当于一群人在观察我，如果发现我有新的改变（来信息）就通知他们。</p>
+<p>所以我是被观察者，而张二妮她们是观察者。</p>
+<h3 id="3-规范"><a href="#3-规范" class="headerlink" title="3.规范"></a>3.规范</h3><p>我把这套模式说给别村的信使听，之后，越来越多的村像我们一样搞一套类似的模式来进行信息通知。</p>
+<p>但是每个村的实现方式又有点不太一样。比如有的信使他就不用SMSCallback接口，自己搞了个SMSListener的接口，也不用register方法来注册观察者，而是用addObserver来添加观察者。</p>
+<p>这样一来，导致我们张二妮她们去别的村又得再实现一个接口，非常不方便。</p>
+<p>虽然这件事是我搞出来的，但我无能为力呀，只能上报帝国。</p>
+<p>帝国非常重视，派了巡察使下来解决这个问题。</p>
+<p>巡察使了解情况之后说，竟然大家都有共性（暴露），那帝国就把他抽象出来。</p>
+<p>首先，暴露狂需要继承Observable类，Observable类对外提供了这几个接口：</p>
+<ul>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void addObserver(Observer o)，增加观察者</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void deleteObserver(Observer o)，删除观察者</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void setChanged()，设置有事件的标志</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void notifyObservers(Object arg)，通知观察新的事件</div></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">int countObservers()，统计观察者数量</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其次，观察者需要观察暴露狂，就要实现Observer接口，Observer接口中有一个待实现的方法：</p>
+<ul>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void update(Observable o, Object arg);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>暴露狂每次要暴露消息就会通过调用观察者的void update(Observable o, Object arg)来进行通知，第一个参数是暴露狂自己，第二个参数是暴露狂调用notifyObservers(Object arg)传进去的参数。</p>
+<p>我听了之后翻了翻白眼，我们可是为了村民服务，居然说我们是暴露狂…不过，这样一来，大家统一一样的规范，倒是推动了帝国信息传输行业的蒸蒸日上。</p>
+<p>为此，我首先对自己进行兼容。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SMSContext</span> <span class="keyword">extends</span> <span class="title">Observable</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SMSContext</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">  </div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNewMessage</span><span class="params">(Message msg)</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setChanged</span><span class="params">()</span></span>;</div><div class="line">    notifyObservers(msg);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同时，张二妮她们也进行标准化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZhangErNi</span> <span class="keyword">implements</span> <span class="title">Observer</span></span>&#123;</div><div class="line">  </div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Object o)</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(o <span class="keyword">instanceof</span> Message &amp;&amp; <span class="string">"ZhangErNi"</span>.equals(((Message)msg).getTarName()))&#123;</div><div class="line">      <span class="comment">//处理</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>巡察使还得意地告诉我，他们给这套规范起了个洋气的名字，叫<strong>发布-订阅模式</strong>，因为这看起来就像一批人去订阅报纸，然后报纸一来就发给订阅的人一样，是一种一对多的关系。</p>
+<p>好吧，其实，我的<strong>观察者设计模式</strong>也很洋气！</p>
+<h3 id="4-后续"><a href="#4-后续" class="headerlink" title="4.后续"></a>4.后续</h3><p>随着帝国地不断发展，我们通讯行业在<strong>观察者设计模式</strong>的推动下磕磕碰碰地走过来。</p>
+<p>我们遇到了这些问题：</p>
+<ul>
+<li>随便把一封信发给观察者，让观察者去判断是不是他的，这种做法并不好，因为观察者可以随便看信的内容，所以我们需要一种机制来判断这封信是属于哪个观察者的，然后notify给对应的观察者。</li>
+<li>把信发给观察者们是一种同步的行为，如果某个观察者在自己的update方法中做了比较耗时的操作，可能会堵塞，以致于后面的观察者迟迟收不到消息，对性能表现堪忧。所以，我们必须设计一种比较合理的异步通知机制。</li>
+</ul>
+<p>后来，我还听说有些村庄在网络传输中都采用<strong>观察者模式</strong>思想。</p>
+<p>不管在哪里用，怎么用，符合这种想法的思想都是<strong>观察者设计模式</strong>的思想。</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2017年11月08日 23:59</p>
+        <p>原始链接： <a class="post-url" href="/2017/03/31/Java/JavaObservable1.0/" title="Java帝国设计模式之观察者设计模式1.0">https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/&title=《Java帝国设计模式之观察者设计模式1.0》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/&title=《Java帝国设计模式之观察者设计模式1.0》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之观察者设计模式1.0》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2017/03/31/Java/JavaObservable1.0/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-背景"><span class="post-toc-text">1.背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-信使"><span class="post-toc-text">2.信使</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-规范"><span class="post-toc-text">3.规范</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-后续"><span class="post-toc-text">4.后续</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2017/10/11/Java/JavaObservable2.0/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java帝国设计模式之观察者设计模式2.0
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2017/01/10/Java/JavaSingleton/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国之单例设计模式</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2017 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
