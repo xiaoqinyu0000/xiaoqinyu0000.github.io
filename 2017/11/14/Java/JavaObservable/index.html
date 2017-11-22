@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Java帝国设计模式之观察者设计模式4.0 | DevQin的技术博客</title>
+  <title>Java帝国设计模式之观察者设计模式（正式版） | DevQin的技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="Java、Android" />
@@ -11,16 +11,16 @@
   <meta name="description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    我是一个Java类，叫做UserAction.java， 生活在一个我们称之为App村的手机端的App中 ，在村里我的本职工作是负责用户登录和用户注销的操作。 ​    我本来是兢兢业业，一心扑在工作上， 但随着业务的不断迭代，我的工作重心不断地发生转移。 ​    一开始，用户登录之后我只需要找到数据库管理">
 <meta name="keywords" content="Java、Android">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java帝国设计模式之观察者设计模式4.0">
+<meta property="og:title" content="Java帝国设计模式之观察者设计模式（正式版）">
 <meta property="og:url" content="https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/index.html">
 <meta property="og:site_name" content="DevQin的技术博客">
 <meta property="og:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    我是一个Java类，叫做UserAction.java， 生活在一个我们称之为App村的手机端的App中 ，在村里我的本职工作是负责用户登录和用户注销的操作。 ​    我本来是兢兢业业，一心扑在工作上， 但随着业务的不断迭代，我的工作重心不断地发生转移。 ​    一开始，用户登录之后我只需要找到数据库管理">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/JavaObservable/o1.png">
 <meta property="og:image" content="https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/JavaObservable/o2.png">
-<meta property="og:updated_time" content="2017-11-22T07:28:22.865Z">
+<meta property="og:updated_time" content="2017-11-22T07:29:42.662Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java帝国设计模式之观察者设计模式4.0">
+<meta name="twitter:title" content="Java帝国设计模式之观察者设计模式（正式版）">
 <meta name="twitter:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   1.背景​    我是一个Java类，叫做UserAction.java， 生活在一个我们称之为App村的手机端的App中 ，在村里我的本职工作是负责用户登录和用户注销的操作。 ​    我本来是兢兢业业，一心扑在工作上， 但随着业务的不断迭代，我的工作重心不断地发生转移。 ​    一开始，用户登录之后我只需要找到数据库管理">
 <meta name="twitter:image" content="https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/JavaObservable/o1.png">
   
@@ -120,7 +120,7 @@
         
   
     <h1 class="post-title" itemprop="name">
-      Java帝国设计模式之观察者设计模式4.0
+      Java帝国设计模式之观察者设计模式（正式版）
     </h1>
     <div class="post-title-bar">
       <ul>
@@ -212,8 +212,8 @@
 <h3 id="4-附录：Observer源码："><a href="#4-附录：Observer源码：" class="headerlink" title="4.附录：Observer源码："></a>4.附录：Observer源码：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Observable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> changed = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">private</span> Vector&lt;Observer&gt; obs = <span class="keyword">new</span> Vector();	<span class="comment">//线程同步</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Observable</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer o)</span> </span>&#123;	<span class="comment">//订阅</span></div><div class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.obs.contains(o)) &#123;</div><div class="line">                <span class="keyword">this</span>.obs.addElement(o);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">deleteObserver</span><span class="params">(Observer o)</span> </span>&#123;	<span class="comment">//删除</span></div><div class="line">        <span class="keyword">this</span>.obs.removeElement(o);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.notifyObservers((Object)<span class="keyword">null</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">(Object arg)</span> </span>&#123;</div><div class="line">        Object[] arrLocal;</div><div class="line">        <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;	<span class="comment">//线程安全</span></div><div class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.changed) &#123;	<span class="comment">//如果没有setChanged();	就不通知了</span></div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            arrLocal = <span class="keyword">this</span>.obs.toArray();</div><div class="line">            <span class="keyword">this</span>.clearChanged();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = arrLocal.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</div><div class="line">            ((Observer)arrLocal[i]).update(<span class="keyword">this</span>, arg);	<span class="comment">//通知操作，从后订阅的通知到先订阅的</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">deleteObservers</span><span class="params">()</span> </span>&#123;	<span class="comment">//清空订阅者</span></div><div class="line">        <span class="keyword">this</span>.obs.removeAllElements();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">setChanged</span><span class="params">()</span> </span>&#123;	<span class="comment">//设置通知的标志</span></div><div class="line">        <span class="keyword">this</span>.changed = <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">clearChanged</span><span class="params">()</span> </span>&#123;	<span class="comment">//清楚通知的标志</span></div><div class="line">        <span class="keyword">this</span>.changed = <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">hasChanged</span><span class="params">()</span> </span>&#123;	<span class="comment">//返回是否有通知</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.changed;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">countObservers</span><span class="params">()</span> </span>&#123;	<span class="comment">//观察者的数量</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.obs.size();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2017年11月22日 15:28</p>
-        <p>原始链接： <a class="post-url" href="/2017/11/14/Java/JavaObservable/" title="Java帝国设计模式之观察者设计模式4.0">https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/</a></p>
+        <p>最后更新： 2017年11月22日 15:29</p>
+        <p>原始链接： <a class="post-url" href="/2017/11/14/Java/JavaObservable/" title="Java帝国设计模式之观察者设计模式（正式版）">https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/</a></p>
         <footer>
             <a href="https://xiaoqinyu0000.github.io">
                 <img src="/images/logo.png" alt="DevQin">
@@ -235,7 +235,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&title=《Java帝国设计模式之观察者设计模式4.0》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&title=《Java帝国设计模式之观察者设计模式（正式版）》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -245,7 +245,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&title=《Java帝国设计模式之观察者设计模式4.0》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&title=《Java帝国设计模式之观察者设计模式（正式版）》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
@@ -255,7 +255,7 @@
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之观察者设计模式4.0》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之观察者设计模式（正式版）》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2017/11/14/Java/JavaObservable/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
@@ -295,9 +295,19 @@
 
 <nav id="article-nav">
   
+    <a href="/2017/11/14/Java/JavaObservable4.0/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          Java帝国设计模式之观察者设计模式4.0
+        
+      </span>
+    </a>
   
-    <a href="/2017/11/14/Java/JavaObservable4.0/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">Java帝国设计模式之观察者设计模式4.0</span>
+  
+    <a href="/2017/11/08/Java/JavaObservable3.0/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国设计模式之观察者设计模式3.0</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   
