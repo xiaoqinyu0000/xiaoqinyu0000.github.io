@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java帝国设计模式之建造者模式 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Java、Android" />
+  
+  <meta name="description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事形象村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 我们村里的人可以创造各种各样的图形。 我们把这种图形叫做Drawable。 我们的宗旨就是通过图形改变Java帝国在外界的形象。 我是DrawableUtils.java，是村里元老级别的任务。 给你看看我最近接的几个单子：  用户一的需求是一个50 * 50的蓝色正">
+<meta name="keywords" content="Java、Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java帝国设计模式之建造者模式">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事形象村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 我们村里的人可以创造各种各样的图形。 我们把这种图形叫做Drawable。 我们的宗旨就是通过图形改变Java帝国在外界的形象。 我是DrawableUtils.java，是村里元老级别的任务。 给你看看我最近接的几个单子：  用户一的需求是一个50 * 50的蓝色正">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/4.png">
+<meta property="og:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/3.png">
+<meta property="og:updated_time" content="2018-07-22T16:31:29.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java帝国设计模式之建造者模式">
+<meta name="twitter:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事形象村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 我们村里的人可以创造各种各样的图形。 我们把这种图形叫做Drawable。 我们的宗旨就是通过图形改变Java帝国在外界的形象。 我是DrawableUtils.java，是村里元老级别的任务。 给你看看我最近接的几个单子：  用户一的需求是一个50 * 50的蓝色正">
+<meta name="twitter:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/4.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">DevQin Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        DevQin Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        DevQin的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="DevQin" target="_blank" href="//https://xiaoqinyu0000.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//https://github.com/xiaoqinyu0000">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//https://weibo.com/u/3581941953?refer_flag=1001030101_">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//https://twitter.com/xiaoqinyu0000">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaBuilder" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java帝国设计模式之建造者模式
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-06-10
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<h2 id="前事"><a href="#前事" class="headerlink" title="前事"></a>前事</h2><p>形象村，一个在Java帝国里妇孺皆知的，最美丽的村庄。</p>
+<p>我们村里的人可以创造各种各样的图形。</p>
+<p>我们把这种图形叫做Drawable。</p>
+<p>我们的宗旨就是通过图形改变Java帝国在外界的形象。</p>
+<p>我是DrawableUtils.java，是村里元老级别的任务。</p>
+<p>给你看看我最近接的几个单子：</p>
+<p><img src="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/4.png" alt="Demo"></p>
+<p>用户一的需求是一个50 * 50的蓝色正矩形；</p>
+<p>用户二的需求是一个50 * 50的蓝色正矩形，还要一个黑色的边框。</p>
+<p>其实这些多姿多彩的图形都是Drawable对象。</p>
+<p>简单的Drawable对象非常简单（例如图一就是一个蓝色的正方形），复杂的Drawale对象非常复杂（形状、颜色、大小、边框、阴影、层次等等）。</p>
+<p>所以，我把Drawable对象称为“复杂对象”。</p>
+<p>这年头，做服务业不容易呀～</p>
+<p>为了让用户不需要记住太复杂的调用方法，我只开放了一个静态方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">用户需要什么样的图形，只需要把对应的属性（长、宽、颜色...）告诉我就行...</div><div class="line"></div><div class="line">```Java</div><div class="line">class DrawableUtils &#123;</div><div class="line">    public static Drawable getDrawable(int width,int height,int color)&#123;&#125;</div><div class="line">    </div><div class="line">    public static Drawable getDrawable(int width,int height,int color,int borderColor)&#123;&#125;</div><div class="line">   </div><div class="line">    public static Drarwale getDrawable(int width,int height,int color,int borderColor,float radius)&#123;&#125;</div><div class="line">    </div><div class="line">    public static Drarwale getDrawable(int width,int height,int color,int borderColor,float radius,float strokeDashGap)&#123;&#125;</div><div class="line">    </div><div class="line">    public static Drarwale getDrawable(int width,int height,int color,int borderColor,float radius,float strokeDashGap,float shadow)&#123;&#125;</div><div class="line">    </div><div class="line">    ......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>为此，我整整重载了99次，我的天哟….我觉得帝国要是有一个劳模榜，前三名肯定有我。</p>
+<p>比如，你想拿到上面第一个图形，你需要给我3个参数：</p>
+<ul>
+<li>宽度：50</li>
+<li>长度：50</li>
+<li>颜色：Color.Blue</li>
+</ul>
+<p>具体调用方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Drawable drawable = DrawableUtils.getDrawable(<span class="number">50</span>, <span class="number">50</span>, Color.Blue);</div></pre></td></tr></table></figure>
+<p>根据这3个参数，我便知道你要一个50 * 50的蓝色矩形。</p>
+<p>又比如图2，想再加一个黑色边框，只需要增加一个参数就行：</p>
+<ul>
+<li>边框：Color.Black</li>
+</ul>
+<p>具体调用方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Drawable drawable = DrawableUtils.getDrawable(<span class="number">50</span>, <span class="number">50</span>, Color.Blue, Color.Black);</div></pre></td></tr></table></figure>
+<p>没什么是一个重载方法解决不了的。如果解决不了，那就两个重载方法…</p>
+<p>我真的佩服我的机智。</p>
+<p>当然，村里也有几个跟我一样提供创造Drawable服务的“人”，但他们不是调用复杂就是功能缺乏。</p>
+<p>哪有我这么方便快捷时尚，跟上时代的步伐。（时尚时尚最时尚……在光滑的地板上摩擦，摩擦，摩擦……好像有点儿嘚瑟了）</p>
+<h2 id="今生"><a href="#今生" class="headerlink" title="今生"></a>今生</h2><p>可能是名声大噪，被网友称为网红村的缘故，每天有络绎不绝的人来找我。</p>
+<p>这一天，有一个叫张大胖的找了上门。</p>
+<p>我决定见一见他，享受一下村外人的赞美。</p>
+<p>没见到对方见到我第一句话就是：“我是代表正义来消灭你那些垃圾的API的。”</p>
+<p>我去…这感情来了个神经病？</p>
+<p>当然，现在我是名人了，我微微一笑，耐着性子问：“这位先生，此话和解？”</p>
+<p>对方给我看了一行代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Drawable drawable = DrawableUtils.getDrarwable(<span class="number">50</span>, <span class="number">50</span>, Color.Red, Color.Blue, <span class="number">5</span>, Color.Black, <span class="number">4</span> , <span class="number">9</span>, Color.Red, <span class="number">4</span>, <span class="number">8</span>);</div></pre></td></tr></table></figure>
+<p>我一瞧，你不是使用我的服务获得一个Drawable对象嘛～有什么奇怪的？</p>
+<p>他指着这行代码。</p>
+<p>”你看这行代码，能够清晰得知道要的是怎么样的图形吗？</p>
+<p>假设要你把阴影颜色改了，你知道改哪个值吗？</p>
+<p>每次用你的服务都要去查文档，从N个重载方法里找到对应所需的方法，再看看每个属性的含义，你觉得好用吗？“。</p>
+<p>我心想这确实是问题，然而世间之事哪能十全十美呢？</p>
+<p>我叹了口气：“Drawable是复杂对象。有很多属性和组合方式…有形状、颜色、长宽、边框、阴影、内外边距….”。</p>
+<p>”停！“对方毫不客气地打断了我的话”。在来之前，我就想到一个API的设计方案，特来跟你讨论下。“</p>
+<p>真是个没礼貌的家伙，我点了点头，示意他继续讲下去。</p>
+<p>“针对这种复杂对象的构建。既然一个方法的方法行不通，那便用多个方法”：</p>
+<p>对方不知道从哪抽出一张卡片，上面还印有我的名字：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setShare</span><span class="params">(Share share)</span></span>&#123;&#125;		<span class="comment">//设置形状，比如Share.Rectangle,Share.round</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSize</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span></span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBorderSize</span><span class="params">(<span class="keyword">int</span> size)</span></span>&#123;&#125;	<span class="comment">//边框大小</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBorderColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123;&#125;	<span class="comment">//边框颜色</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPadding</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span></span>&#123;&#125;</div><div class="line">    ...</div><div class="line"> 	<span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原来不用重载，把各个属性拆分成各个方法，让调用者自己去组合他们需要的属性。</p>
+<p>在对象属性比较多的情况下，这样设计API确实比较好。</p>
+<p>但这其实不算什么…我只是发现问题比较晚而已。</p>
+<p>对方也许看到了我的不屑：”在设计完这些接口之后，我发现你这个类会变得超级臃肿。因为你这个类不止要提供对外的API。肯定还要对这个属性进行校验、转换、处理、合并、再创造出一个Drawable对象。不符合设计原则中的单一职责原则。至少，我觉得与外界打交道的这些API可以抽出来。“</p>
+<p>握草，击中我的要害了，这厮果然有两下子。因为其实不管是新的设计方案还是旧的那一套API，都存在这个问题。</p>
+<p>赶紧向对方请教一番。</p>
+<p>对方笑了笑，又扔了一张卡片给我，”你可以开放一个静态内部类专门用来与外界打交道“：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> </span>&#123;</div><div class="line">	<span class="keyword">private</span> Builder mBuilder;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">DrawableUtils</span><span class="params">(Builder builder)</span></span>&#123;	<span class="comment">//private，让外面无法直接创建</span></div><div class="line">        <span class="keyword">this</span>.mBuilder = builder;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Builder &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setShare</span><span class="params">(Share share)</span></span>&#123;&#125;		<span class="comment">//设置形状，比如Share.Rectangle,Share.round</span></div><div class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSize</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span></span>&#123;&#125;</div><div class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123;&#125;</div><div class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBorderSize</span><span class="params">(<span class="keyword">int</span> size)</span></span>&#123;&#125;	<span class="comment">//边框大小</span></div><div class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBorderColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123;&#125;	<span class="comment">//边框颜色</span></div><div class="line">    	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPadding</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span></span>&#123;&#125;</div><div class="line">    	...</div><div class="line">       	<span class="function"><span class="keyword">public</span> DrawableUtils <span class="title">builder</span><span class="params">()</span></span>&#123;</div><div class="line">       		<span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils(<span class="keyword">this</span>);      </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>妙妙秒！（我们一起学猫叫，一起喵喵喵喵喵……哈哈哈，我皮一下咯，上次你们来请我去直播，我也跟你们年轻人一整天喵喵喵的。唉，直播后遗症。）</p>
+<p>搞一个静态内部类来提供API给外界访问，最后通过<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这个设计确实从调用到实现把职责区分开了。</div><div class="line"></div><div class="line">我已经不由自主得在纸上模拟他人怎么调用这个API了：</div><div class="line"></div><div class="line">```java</div><div class="line">DrawableUtils.Builder builder = new DrawableUtils.Builder();</div><div class="line">builder.setSize(50,50);</div><div class="line">builder.setColor(Color.Blue);</div><div class="line">builder.setBorderSize(5);</div><div class="line">builder.setBorderColor(Color.Black);</div><div class="line">Drawable drawable = builder.builder().getDrawable();</div></pre></td></tr></table></figure></p>
+<p>看到笔下的代码，心里一阵发堵。这个调用方式可是比我之前提供的API复杂得多呀！如果旧的API，只有一行代码就可以可以了！</p>
+<p>或许对方看到我内心的纠结，笑了笑问：”你知道链式调用吗？“。</p>
+<p>我内心真发堵呢？哪听到他说什么？</p>
+<p>紧接着，他又扔了一张卡片过来，里面静态内部类Builder的方法居然又有了改变：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> </span>&#123;</div><div class="line">    ...</div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Builder &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setShare</span><span class="params">(Share share)</span></span>&#123; ...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setSize</span><span class="params">(<span class="keyword">int</span> width, <span class="keyword">int</span> height)</span></span>&#123; ...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123; ...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setBorderSize</span><span class="params">(<span class="keyword">int</span> size)</span></span>&#123;...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setBorderColor</span><span class="params">(<span class="keyword">int</span> color)</span></span>&#123;...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">public</span> Builder <span class="title">setPadding</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> right, <span class="keyword">int</span> bottom)</span></span>&#123;...</div><div class="line">            <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">        &#125;</div><div class="line">    	...</div><div class="line">       	<span class="function"><span class="keyword">public</span> DrawableUtils <span class="title">builder</span><span class="params">()</span></span>&#123;</div><div class="line">       		<span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils(<span class="keyword">this</span>);      </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每一个Builder都返回了一个this，可是这又有什么用呢。</p>
+<p>结合之前对方说的链式调用，我内心突然想到某种可能！</p>
+<p>赶紧对之前调用方式的Demo做了一点修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Drawable drawable = <span class="keyword">new</span> DrawableUtils.Builder()</div><div class="line">    					.setSize(<span class="number">50</span>,<span class="number">50</span>)</div><div class="line">    					.setColor(Color.Blue)</div><div class="line">    					.setBorderSize(<span class="number">5</span>)</div><div class="line">    					.setBorderColor(Color.Black)</div><div class="line">    					.builder()</div><div class="line">    					.getDrawable();</div></pre></td></tr></table></figure>
+<p>居然用一行代码就完成了调用，而且每个方法和属性都是如此得清晰、如此的明了，让人陶醉其中，不能自拔！</p>
+<p>看来，好的API设计远远重要于文档。</p>
+<p>此时，我才知道来的是一个高手，内心一阵佩服。</p>
+<p>我急忙转身面向对方，拱了拱手。</p>
+<h2 id="闭关"><a href="#闭关" class="headerlink" title="闭关"></a>闭关</h2><p>真是天外有天，人外有人。</p>
+<p>闭关七天七夜，我终于根据对方的设计方案把这套新的API给完成。</p>
+<p>看着设计好的API，我发现内部实现比之前的旧API的实现复杂多了。</p>
+<p>但各个地方看起来又非常清晰明白，方便调用，也方便维护。</p>
+<p>心里想了想，这大概就是设计的力量吧！</p>
+<p>果不其然，新的API推出之后，我的名气在帝国可谓一时无两。</p>
+<p>当大家问我新的API的设计理念的时候，我脑里浮现了张大胖临走时留下的最后一张卡片：</p>
+<p>”建…造…者….设…计…模…式！“</p>
+<h2 id="商人"><a href="#商人" class="headerlink" title="商人"></a>商人</h2><p>俗话说，有人的地方就有江湖！</p>
+<p>有这么一群商（J）人（S），他们通过分析已有的API进行二次封装，通过向大家提供更为便捷的API调用来收费。</p>
+<p>这次，就有一个叫DrawableDirector的商人通过对DrawableUtils的接口进行二次封装：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawableDirector</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">createRedColorRectangle</span><span class="params">()</span></span>&#123;	<span class="comment">//创造一种红色的矩形</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils.Builder().set.Color(Color.Red)......builder().getDrawable();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">createBlueColorRectangle</span><span class="params">()</span></span>&#123;	<span class="comment">//创造一种蓝色的矩形</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils.Builder().setColor(Color.Blue).......builder().getDrawable();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我当然管不了这些事，而且这又一次证明了我的魅力。</p>
+<p>后来有好事者把这么一种基于建造者设计模式，把常用的构建过程封装起来的类称为<code>Director</code>。</p>
+<p>这种做法也正式纳入建造者设计模式的设计思想中。</p>
+<p>但大家在设计API的时候很少把Director考虑进去，可能是太懒了吧！    </p>
+<h2 id="磨炼"><a href="#磨炼" class="headerlink" title="磨炼"></a>磨炼</h2><p>虽然我是劳模网红，但这日复一日也是很累诶！</p>
+<p>别人都有双休日，法定节假日还放假，凭什么我就要997。</p>
+<p>我觉得在村里找些小伙伴来磨砺（#滑稽）。</p>
+<p>所谓无规矩不成方圆，以下约法三章。</p>
+<ul>
+<li>章法一：能吃苦耐劳，实现用户所需Drawable的创建。</li>
+<li>章法二：基于章法一的特点，大家必须实现IDrawableWorker接口，实现<strong>getDrawable()</strong>方法。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="function">Drawable <span class="title">getDrawable</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这不，我自己就实现了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> <span class="keyword">implements</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;...&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>章法三：轮到谁值班，Builder就把需求给谁。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> <span class="keyword">implements</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;...&#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Builder &#123;</div><div class="line">    	...</div><div class="line">       	<span class="function"><span class="keyword">public</span> IDrawableWorker <span class="title">builder</span><span class="params">()</span></span>&#123;	<span class="comment">//返回IDrawableWorker对象</span></div><div class="line">       		<span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils(<span class="keyword">this</span>);      </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最近想去旅游，让隔壁大傻来顶一段时间。</p>
+<p>首先，依据章法二实现IDrawableWorker接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dasha</span> <span class="keyword">implements</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> 天灵灵、地灵灵，老天赐我一个Drawable ;</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>让Builder把活交给大傻，嘿嘿嘿：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> <span class="keyword">implements</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;...&#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Builder &#123;</div><div class="line">    	...</div><div class="line">       	<span class="function"><span class="keyword">public</span> IDrawableWorker <span class="title">builder</span><span class="params">()</span></span>&#123;</div><div class="line">       		<span class="keyword">return</span> <span class="keyword">new</span> Dasha(<span class="keyword">this</span>);      </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用户还是跟以前一样地调用，然而却不知道工作的人已经换了一个。</p>
+<p>恩～这个想法很大胆！</p>
+<h2 id="猜一猜"><a href="#猜一猜" class="headerlink" title="猜一猜"></a>猜一猜</h2><p>施主，既然你耐心地看到这。那就送你一张UML图。</p>
+<p>猜一猜里面的各个元素对应着本文的哪些类：</p>
+<p><img src="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/3.png" alt="3"></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年07月23日 00:31</p>
+        <p>原始链接： <a class="post-url" href="/2018/06/11/Java/JavaBuilder/" title="Java帝国设计模式之建造者模式">https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/&title=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/&title=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前事"><span class="post-toc-text">前事</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#今生"><span class="post-toc-text">今生</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#闭关"><span class="post-toc-text">闭关</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#商人"><span class="post-toc-text">商人</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#磨炼"><span class="post-toc-text">磨炼</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#猜一猜"><span class="post-toc-text">猜一猜</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/14/Java/JavaObservable/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国设计模式之观察者设计模式（正式版）</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
