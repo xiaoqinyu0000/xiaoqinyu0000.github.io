@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="Java、Android" />
   
-  <meta name="description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形与图像。">
+  <meta name="description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   帝国图形始之初图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形">
 <meta name="keywords" content="Java、Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java帝国设计模式之建造者模式">
 <meta property="og:url" content="https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/index.html">
 <meta property="og:site_name" content="DevQin的技术博客">
-<meta property="og:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形与图像。">
+<meta property="og:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   帝国图形始之初图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/4.png">
 <meta property="og:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/3.png">
-<meta property="og:updated_time" content="2018-07-25T15:45:47.772Z">
+<meta property="og:updated_time" content="2018-07-25T16:01:01.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java帝国设计模式之建造者模式">
-<meta name="twitter:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   前事图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形与图像。">
+<meta name="twitter:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   帝国图形始之初图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。 整个Java帝国就是因为我们村而变得多姿多彩。 据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。 几乎没有人愿意与天天与这些黑窗口打交道。 那是一个灰暗的年代。 也从那时候起，我们村长就决定举全村之力，研究Java之下的图形">
 <meta name="twitter:image" content="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/4.png">
   
   
@@ -148,7 +148,7 @@
 <li>感谢刘欣老师的指点、修改和排版</li>
 </ul>
 </blockquote>
-<h2 id="前事"><a href="#前事" class="headerlink" title="前事"></a>前事</h2><p>图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。</p>
+<h2 id="帝国图形始之初"><a href="#帝国图形始之初" class="headerlink" title="帝国图形始之初"></a>帝国图形始之初</h2><p>图形村，一个在Java帝国里妇孺皆知的，最美丽的村庄。</p>
 <p>整个Java帝国就是因为我们村而变得多姿多彩。</p>
 <p>据说，在帝国建立初期，人类眼里的Java的程序就是一个黑窗口，里面显示一大片文字。</p>
 <p>几乎没有人愿意与天天与这些黑窗口打交道。</p>
@@ -183,7 +183,7 @@
 <p>一行代码拿到Drawable对象就可以在人类的设备上显示图形啦。</p>
 <p>没有什么是一个重载方法解决不了的，如果有，那就两个重载方法…</p>
 <p>我真的佩服我的机智！</p>
-<h2 id="今生"><a href="#今生" class="headerlink" title="今生"></a>今生</h2><p>可能是名声大噪，被网友称为网红的缘故，每天有络绎不绝的人来拜访我。</p>
+<h2 id="合久必分，链式调用"><a href="#合久必分，链式调用" class="headerlink" title="合久必分，链式调用"></a>合久必分，链式调用</h2><p>可能是名声大噪，被网友称为网红的缘故，每天有络绎不绝的人来拜访我。</p>
 <p>这一天，有一个叫张大胖的找了上门。</p>
 <p>我决定见一见他，享受一下村外人的赞美。</p>
 <p>没见到对方见到我第一句话就是：“我是代表正义来消灭你那些垃圾的API的，好难用哇！”</p>
@@ -225,14 +225,14 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Drawable drawable = <span class="keyword">new</span> DrawableUtils.Builder()</div><div class="line">    					.setSize(<span class="number">50</span>,<span class="number">50</span>)</div><div class="line">    					.setColor(Color.Blue)</div><div class="line">    					.setBorderSize(<span class="number">5</span>)</div><div class="line">    					.setBorderColor(Color.Black)</div><div class="line">    					.builder()</div><div class="line">    					.getDrawable();</div></pre></td></tr></table></figure>
 <p>居然用一行代码就完成了调用，而且每个方法和属性都是如此得清晰、如此的明了，让人陶醉其中，不能自拔！</p>
 <p>看来，好的API设计远远重要于一份面面俱到的文档。</p>
-<h2 id="闭关"><a href="#闭关" class="headerlink" title="闭关"></a>闭关</h2><p>闭关七天七夜，我终于根据对方的设计方案把这套新的API给完成。</p>
+<h2 id="闭关重构悟设计"><a href="#闭关重构悟设计" class="headerlink" title="闭关重构悟设计"></a>闭关重构悟设计</h2><p>闭关七天七夜，我终于根据对方的设计方案把这套新的API给完成。</p>
 <p>看着设计好的API，我发现内部实现比之前的旧API的实现复杂多了。</p>
 <p>但各个地方看起来又非常清晰明白，方便调用，也方便维护。</p>
 <p>心里想了想，这大概就是设计的力量吧！</p>
 <p>果不其然，新的API推出之后，我的名气在帝国可谓一时无两。</p>
 <p>当大家问我新的API的设计理念的时候，我脑里浮现了张大胖临走时留下的最后一张卡片：</p>
 <p>”建…造…者….设…计…模…式！“</p>
-<h2 id="商人"><a href="#商人" class="headerlink" title="商人"></a>商人</h2><p>俗话说，有人的地方就有江湖！</p>
+<h2 id="商人重利出Director"><a href="#商人重利出Director" class="headerlink" title="商人重利出Director"></a>商人重利出Director</h2><p>俗话说，有人的地方就有江湖！</p>
 <p>有这么一群商（J）人（S），他们通过分析已有的API进行二次封装，通过向大家提供更为便捷的API调用来收费。</p>
 <p>这次，就有一个叫DrawableDirector的商人通过对DrawableUtils的接口进行二次封装：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawableDirector</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Drawable <span class="title">createRedColorRectangle</span><span class="params">()</span></span>&#123;	<span class="comment">//创造一种红色的矩形</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils.Builder().set.Color(Color.Red)......builder().getDrawable();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Drawable <span class="title">createBlueColorRectangle</span><span class="params">()</span></span>&#123;	<span class="comment">//创造一种蓝色的矩形</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DrawableUtils.Builder().setColor(Color.Blue).......builder().getDrawable();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -240,7 +240,7 @@
 <p>后来有好事者把这么一种基于建造者设计模式，把常用的构建过程封装起来的类称为<code>Director</code>。</p>
 <p>这种做法也正式被纳入建造者设计模式的设计思想中。</p>
 <p>但大家在设计API的时候很少把Director考虑进去，可能是太懒了吧！    </p>
-<h2 id="磨炼"><a href="#磨炼" class="headerlink" title="磨炼"></a>磨炼</h2><p>虽然我是劳模网红，但这日复一日也是很累诶！</p>
+<h2 id="不堪996，约法三章"><a href="#不堪996，约法三章" class="headerlink" title="不堪996，约法三章"></a>不堪996，约法三章</h2><p>虽然我是劳模网红，但这日复一日也是很累诶！</p>
 <p>别人都有双休日，法定节假日还放假，凭什么我就要996。</p>
 <p>我觉得在村里找些小伙伴来磨砺（#滑稽）。</p>
 <p>所谓无规矩不成方圆，以下约法三章。</p>
@@ -261,14 +261,13 @@
 <p>让Builder把活交给大傻，出去玩啦，嘿嘿嘿：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawableUtils</span> <span class="keyword">implements</span> <span class="title">IDrawableWorker</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Drawable <span class="title">getDrawable</span><span class="params">()</span></span>&#123;...&#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Builder &#123;</div><div class="line">    	...</div><div class="line">       	<span class="function"><span class="keyword">public</span> IDrawableWorker <span class="title">builder</span><span class="params">()</span></span>&#123;</div><div class="line">       		<span class="keyword">return</span> <span class="keyword">new</span> Dasha(<span class="keyword">this</span>);      </div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>用户还是跟以前一样地调用，然而却不知道工作的人已经换了一个。</p>
-<p>恩～这个想法很大胆！</p>
 <h2 id="猜一猜"><a href="#猜一猜" class="headerlink" title="猜一猜"></a>猜一猜</h2><p>施主，既然你耐心地看到这。那就送你一张UML图。</p>
 <p>猜一猜里面的各个元素对应着本文的哪些类：</p>
 <p><img src="https://xiaoqinyu0000.github.io/images/Blog/JavaBuilder/3.png" alt="3"></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2018年07月25日 23:45</p>
+        <p>最后更新： 2018年07月26日 00:01</p>
         <p>原始链接： <a class="post-url" href="/2018/06/11/Java/JavaBuilder/" title="Java帝国设计模式之建造者模式">https://xiaoqinyu0000.github.io/2018/06/11/Java/JavaBuilder/</a></p>
         <footer>
             <a href="https://xiaoqinyu0000.github.io">
@@ -344,7 +343,7 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前事"><span class="post-toc-text">前事</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#今生"><span class="post-toc-text">今生</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#闭关"><span class="post-toc-text">闭关</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#商人"><span class="post-toc-text">商人</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#磨炼"><span class="post-toc-text">磨炼</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#猜一猜"><span class="post-toc-text">猜一猜</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#帝国图形始之初"><span class="post-toc-text">帝国图形始之初</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#合久必分，链式调用"><span class="post-toc-text">合久必分，链式调用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#闭关重构悟设计"><span class="post-toc-text">闭关重构悟设计</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#商人重利出Director"><span class="post-toc-text">商人重利出Director</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#不堪996，约法三章"><span class="post-toc-text">不堪996，约法三章</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#猜一猜"><span class="post-toc-text">猜一猜</span></a></li></ol>
         </nav>
     </aside>
     
