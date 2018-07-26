@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java帝国设计模式之建造者模式 | DevQin的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="Java、Android" />
+  
+  <meta name="description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   据说在帝国建立初期，人类眼里的Java程序就是一个黑乎乎的命令行窗口，里面显展示着大片大片的代码和文字。 那是一个灰暗的年代， 几乎没有人愿意天天与这些黑窗口打交道。 国王决心让帝国变得多姿多彩，于是下令建立图形村，研究Java的图形和图像。 经过艰苦卓绝的努力，我们掌握了GUI编程的核心技术，帝国终于可以在人类设备上展示图形">
+<meta name="keywords" content="Java、Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java帝国设计模式之建造者模式">
+<meta property="og:url" content="https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/index.html">
+<meta property="og:site_name" content="DevQin的技术博客">
+<meta property="og:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   据说在帝国建立初期，人类眼里的Java程序就是一个黑乎乎的命令行窗口，里面显展示着大片大片的代码和文字。 那是一个灰暗的年代， 几乎没有人愿意天天与这些黑窗口打交道。 国王决心让帝国变得多姿多彩，于是下令建立图形村，研究Java的图形和图像。 经过艰苦卓绝的努力，我们掌握了GUI编程的核心技术，帝国终于可以在人类设备上展示图形">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/E20C27F25230470B9C95591AB70C1DE1/126077">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/63D041E44E9942F4A9CB19835CA46843/126328">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/55C0FB91911F4B76BE088CA1295732E1/126508">
+<meta property="og:updated_time" content="2018-07-26T15:00:29.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java帝国设计模式之建造者模式">
+<meta name="twitter:description" content="本文仅供《码农翻身》公众号发布 感谢刘欣老师的指点、修改和排版   据说在帝国建立初期，人类眼里的Java程序就是一个黑乎乎的命令行窗口，里面显展示着大片大片的代码和文字。 那是一个灰暗的年代， 几乎没有人愿意天天与这些黑窗口打交道。 国王决心让帝国变得多姿多彩，于是下令建立图形村，研究Java的图形和图像。 经过艰苦卓绝的努力，我们掌握了GUI编程的核心技术，帝国终于可以在人类设备上展示图形">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/E20C27F25230470B9C95591AB70C1DE1/126077">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">DevQin Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a  href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a  href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a  href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        DevQin Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        DevQin的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="DevQin" target="_blank" href="//https://xiaoqinyu0000.github.io/">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//https://github.com/xiaoqinyu0000">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//https://weibo.com/u/3581941953?refer_flag=1001030101_">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//https://twitter.com/xiaoqinyu0000">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Java/JavaBuilder" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Java帝国设计模式之建造者模式
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-07-26
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <blockquote>
+<ul>
+<li>本文仅供《码农翻身》公众号发布</li>
+<li>感谢刘欣老师的指点、修改和排版</li>
+</ul>
+</blockquote>
+<p>据说在帝国建立初期，人类眼里的Java程序就是一个黑乎乎的命令行窗口，里面显展示着大片大片的代码和文字。</p>
+<p>那是一个灰暗的年代， 几乎没有人愿意天天与这些黑窗口打交道。</p>
+<p>国王决心让帝国变得多姿多彩，于是下令建立图形村，研究Java的图形和图像。</p>
+<p>经过艰苦卓绝的努力，我们掌握了GUI编程的核心技术，帝国终于可以在人类设备上展示图形界面了。 </p>
+<h2 id="99个重载函数"><a href="#99个重载函数" class="headerlink" title="99个重载函数"></a>99个重载函数</h2><p>我是图形村的一个代表，专门对外提供一种图形： Square(正方形)</p>
+<p>给你看看我最近接的几个单子：</p>
+<p><img src="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/E20C27F25230470B9C95591AB70C1DE1/126077" alt="img"></p>
+<p>用户一的需求是一个50 * 50的蓝色正方形；</p>
+<p>用户二的需求是一个50 * 50的蓝色正方形，还要一个黑色的边框；</p>
+<p>…</p>
+<p>Square对象可以很简单（例如用户一要的就是一个蓝色的正方形），也可以非常复杂（形状、颜色、大小、边框、阴影、层次等等）。</p>
+<p>用户需要什么样的图形，只需要把对应的属性（长、宽、颜色…）告诉我就行…</p>
+<p>class Square {</p>
+<p>​    public Square(int size, int color) { }</p>
+<p>​    public Square(int size, int color, int borderColor) { }</p>
+<p>​    public Square(int size, int color, int borderColor, float radius) { }</p>
+<p>​    public Square(int size, int color, int borderColor, float radius, float strokeDashGap) { }</p>
+<p>​    public Square(int size, int color, int borderColor, float radius, float strokeDashGap, float shadow) { }</p>
+<p>​    ……</p>
+<p>}</p>
+<p>为此，一个Square的构造函数， 我整整重载了99次！</p>
+<p>不过带来的好处就是不管用户想要一个什么样的图形，只需调用一个方法，一行代码就可以搞定啦。</p>
+<p>比如，用户1想要一个50*50的蓝色正方形，你需要给我3个参数便可以获得Square对象：</p>
+<ul>
+<li>大小：50 * 50</li>
+<li>颜色：Color.Blue</li>
+</ul>
+<p>Square square = new Square(50, 50, Color.Blue);</p>
+<p>又比如图2，想再加一个黑色边框，只需要增加一个参数就行：</p>
+<ul>
+<li>边框：Color.Black</li>
+</ul>
+<p>Square square = new Square(50, Color.Blue, Color.Black);</p>
+<p>仅需一行代码就可以拿到Square对象，然后就可以在人类的设备上显示图形啦。</p>
+<p>没有什么是一个重载方法解决不了的，如果有，那就两个重载方法…</p>
+<p>每当有人抱怨说，从你这99个方法中找到一个合适的方法实在是太难了！  我就扔给他一个文档，里边详细描述着每个方法的参数，含义，只要读一遍，绝对没问题！</p>
+<p>我的坚持引发了大家的怨气，当抱怨的人越来越多，我有点慌了，赶紧去找村长，希望他能给出点注意。</p>
+<p>新设计</p>
+<p>村长看了一会儿我的API，叹了口气说：“怪不得人家抱怨，你看看你的设计！”</p>
+<p>Square square = new Square(50, Color.Red, Color.Blue, 5, Color.Black, 4, 9, Color.Red, 4, 8);</p>
+<p>我一瞧，有什么奇怪的嘛？不就是创建一个Square对象吗？</p>
+<p>他指着这行代码：“你看这行代码，能够清晰得知道要的是怎么样的图形吗？假设要你把阴影颜色改了，你知道改哪个值吗？”</p>
+<p>我说：“稍等，我查下文档。”</p>
+<p>3分钟后我说：“好像是改第5个参数吧。”</p>
+<p>“每次用你的服务都要去查文档，从N个重载方法里找到对应所需的方法，再看看每个属性的含义，你觉得好用吗？” 村长厉声斥责。</p>
+<p>我心想，这确实是问题，然而世间之事哪能十全十美呢？</p>
+<p>我叹了口气：“Square 是复杂对象， 有很多属性和组合方式…有形状、颜色、长宽、边框、阴影、内外边距….”。</p>
+<p>“你啊，真是不思进取，你想想，还有什么好的设计？ ”</p>
+<p>我说：“也许可以做出这样？ ”</p>
+<p>class Square {</p>
+<p>​    public Square() {…}</p>
+<p>​    public void setSize(int size) {…}</p>
+<p>​    public void setColor(int color) {…}</p>
+<p>​    public void setBorderSize(int size) {…}    //边框大小</p>
+<p>​    public void setBorderColor(int color) {…}    //边框颜色</p>
+<p>​    public void setPadding(int left, int top, int right, int bottom) {…}</p>
+<p>​    …</p>
+<p>}</p>
+<p>其实就是把各个属性拆分成各个方法，让用户去组合他们需要的属性！</p>
+<p>Square square = new Square();</p>
+<p>square.setColor(Color.Blue);</p>
+<p>square.setBorderSize(5);</p>
+<p>square.setBorderColor(Color.Black);</p>
+<p>如何对参数进行检查？</p>
+<p>村长说：“这其实是一种类似JavaBean的方法， 比之前好了一点，但是你想过这个问题没有？ 假设一些属性依赖另外一些属性，如果设置了属性A，但是没有设置属性B，那Square对象其实是有问题的，对于这种情况，你怎么处理？你在什么地方检查这种互相依赖的逻辑？ ”</p>
+<p>村长一下子就击中我的要害了，果然有两下子。</p>
+<p>我赶紧请教：“您有何高见？”</p>
+<p>村长说道：“你可以开放一个静态内部类专门用来与外界打交道，来收集用户想要设置的参数并且做检查。”</p>
+<p>class Square {</p>
+<p>​    private int color;</p>
+<p>​    private int borderSize;</p>
+<p>​    ……</p>
+<p>​    private Square(Builder builder) {    //private，让外面无法直接创建</p>
+<p>​        this.color = builder.color;</p>
+<p>​        this.borderSize = builder.borderSize;</p>
+<p>​        ……</p>
+<p>​    }</p>
+<p>​    public static final class Builder {</p>
+<p>​        private int color;</p>
+<p>​        private int borderSize;</p>
+<p>​        ……</p>
+<p>​        public void setColor(int color) { }</p>
+<p>​        public void setBorderSize(int size) { }    //边框大小</p>
+<p>​        public void setBorderColor(int color) { }    //边框颜色</p>
+<p>​        public void setPadding(int left, int top, int right, int bottom) { }</p>
+<p>​        …</p>
+<p>​        public Square build() {</p>
+<p>​            //检查参数之间的关系是否设置正确。</p>
+<p>​            return new Square(this);</p>
+<p>​        }</p>
+<p>​    }</p>
+<p>}</p>
+<p>看到这个代码，我已经不由自主得在纸上模拟用户的使用场景了：</p>
+<p>Square.Builder builder = new Square.Builder();</p>
+<p>builder.setSize(50);</p>
+<p>builder.setColor(Color.Blue);</p>
+<p>builder.setBorderSize(5);</p>
+<p>builder.setBorderColor(Color.Black); //在build方法中会检查参数是否正确。</p>
+<p>Square square = builder.build();</p>
+<p>可是这个调用方式可是比我之前提供的API复杂得多呀！如果旧的API，只用一行代码就可以可以了！</p>
+<h2 id="链式调用"><a href="#链式调用" class="headerlink" title="链式调用"></a>链式调用</h2><p>村长似乎看到了我的疑惑，笑了笑问到：”你知道链式调用吗？“。</p>
+<p>紧接着，他又展示了一段代码，里面静态内部类Builder的所有设置属性的方法的返回值居然变了：</p>
+<p>class Square {</p>
+<p>​    …</p>
+<p>​    public static final class Builder {</p>
+<p>​        public Builder setColor(int color) {</p>
+<p>​            ……</p>
+<p>​            return this;</p>
+<p>​        }</p>
+<p>​        public Builder setBorderSize(int size) {</p>
+<p>​            ……</p>
+<p>​            return this;</p>
+<p>​        }</p>
+<p>​        public Builder setBorderColor(int color) {</p>
+<p>​            ……</p>
+<p>​            return this;</p>
+<p>​        }</p>
+<p>​        public Builder setPadding(int left, int top, int right, int bottom) {</p>
+<p>​            ……</p>
+<p>​            return this;</p>
+<p>​        }</p>
+<p>​        …</p>
+<p>​        public Square build() {</p>
+<p>​            //检查参数之间的关系是否设置正确。</p>
+<p>​            return new Square(this);</p>
+<p>​        }</p>
+<p>​    }</p>
+<p>}</p>
+<p>每一个Builder都返回了一个this，可是这又有什么用呢。</p>
+<p>结合之前对方说的链式调用，我内心突然想到某种可能！</p>
+<p>赶紧对之前调用方式的Demo做了一点修改：</p>
+<p>Square square = new Square.Builder()</p>
+<p>​                .setSize(50)</p>
+<p>​                .setColor(Color.Blue)</p>
+<p>​                .setBorderSize(5)</p>
+<p>​                .setBorderColor(Color.Black)</p>
+<p>​                .build();</p>
+<p>居然用一行代码就完成了调用，而且每个方法和属性都是如此得清晰、如此的明了，让人陶醉其中，不能自拔！</p>
+<p>“看来，好的API设计远远重要于一份面面俱到的文档。” 我不由地感慨。</p>
+<h2 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h2><p>村长说道：“是啊，其实这种方式有个名称，叫做建造者模式！ 对于你这个场景很适用。”</p>
+<p>“建造者模式？ 23种设计模式之一， 我学习过，好像不是这样的啊？”  说着我展示了一个UML 类图。</p>
+<p><img src="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/63D041E44E9942F4A9CB19835CA46843/126328" alt="img"></p>
+<p>“真是死脑筋，我们这个是个简化版嘛！你看看这个图，Client 可以认为就是Director， 对于Builder，我们没有没有接口，直接就是具体类。 核心思想还是一样不过带来的好处就是的嘛！”</p>
+<p><img src="http://note.youdao.com/yws/public/resource/e5c3400077b7cb8b88ae248f302a11bd/xmlnote/55C0FB91911F4B76BE088CA1295732E1/126508" alt="img"></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2018年07月26日 23:00</p>
+        <p>原始链接： <a class="post-url" href="/2018/07/27/Java/JavaBuilder/" title="Java帝国设计模式之建造者模式">https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/</a></p>
+        <footer>
+            <a href="https://xiaoqinyu0000.github.io">
+                <img src="/images/logo.png" alt="DevQin">
+                DevQin
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/&title=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&pic=https://xiaoqinyu0000.github.ioimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/&title=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&source=Java、Android" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java帝国设计模式之建造者模式》 — DevQin的技术博客&url=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/&via=https://xiaoqinyu0000.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://xiaoqinyu0000.github.io/2018/07/27/Java/JavaBuilder/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#99个重载函数"><span class="post-toc-text">99个重载函数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#链式调用"><span class="post-toc-text">链式调用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#建造者模式"><span class="post-toc-text">建造者模式</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/11/Java/JavaBuilder1.0/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">Java帝国设计模式之建造者模式</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2018 DevQin<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://xiaoqinyu0000.github.io",
+      animate: true,
+      isHome: false,
+      share: true
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            
+        </div>
+        <div id="sidebar-menu-box-tags">
+            
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a  href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a  href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+  </div>
+</body>
+</html>
